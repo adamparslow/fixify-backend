@@ -1,0 +1,4 @@
+#playlistContainer {
+    display: flex;
+    flex-direction: column;
+}

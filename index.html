@@ -2,10 +2,17 @@
 <html>
     <head>
         <title>Fixify</title>
-        <script src="main.js" type="text/javascript"></script>
+        <script src="scripts/main.js" type="text/javascript"></script>
+        <link rel="stylesheet" type="text/css" href="style.css">
     </head>
     <body>
-        <a id="authBtn">Click for authorization</a>
-        <button onclick="getUserInformation()">User</button>
+        <div id="authorization">
+            <a id="authBtn">Click for authorization</a>
+        </div>
+        <div id="postAuth">
+            <button onclick="getUserInformation()">User</button>
+            <button onclick="getPlaylists()">Playlists</button>
+            <div id="playlistContainer"></div>
+        </div>
     </body>
 </html>
