@@ -1,4 +1,6 @@
 function getPlaylists(next) {
+    showPlaylists();
+
     var data = {
         headers: {
             Authorization: 'Bearer ' + token
@@ -23,7 +25,6 @@ function getPlaylists(next) {
 function generatePlaylistContainer(playlistJson) {
     const container = document.getElementById('playlistContainer');
     playlistJson.items.forEach((playlist) => {
-        console.log(playlist);
         const button = document.createElement('button');
         button.innerHTML = playlist.name;
         button.onclick = () => {
@@ -34,7 +35,6 @@ function generatePlaylistContainer(playlistJson) {
 }
 
 function playlistButtonClick(href) {
-    console.log(href);
     getPlaylistTracks(href);
 }
 
@@ -52,6 +52,25 @@ function getPlaylistTracks(href) {
             return response.json();
         })
         .then((json) => {
-            console.log(json);
+            const images = extractImages(json.items);
+            createCollage(images);
         });
+}
+
+function extractImages(songs) {
+    return songs.map((song) => song.track.album.images[0]);
+}
+
+function showPlaylists() {
+    const playlist = document.getElementById('playlistContainer');
+    playlist.style.display = "";
+    playlist.innerHTML = "";
+    document.getElementById('imageContainer').style.display = "none";
+}
+
+function showImages() {
+    document.getElementById('playlistContainer').style.display = "none";
+    const image = document.getElementById('imageContainer');
+    image.style.display = "";
+    image.innerHTML = "";
 }
