@@ -1,5 +1,5 @@
 function getPlaylists(next) {
-    showPlaylists();
+    showPlaylistsDiv();
 
     var data = {
         headers: {
@@ -61,16 +61,16 @@ function extractImages(songs) {
     return songs.map((song) => song.track.album.images[0]);
 }
 
-function showPlaylists() {
+function showPlaylistsDiv() {
     const playlist = document.getElementById('playlistContainer');
     playlist.style.display = "";
     playlist.innerHTML = "";
     document.getElementById('imageContainer').style.display = "none";
 }
 
-function showImages() {
+function showImagesDiv() {
     document.getElementById('playlistContainer').style.display = "none";
     const image = document.getElementById('imageContainer');
     image.style.display = "";
-    image.innerHTML = "";
+    // image.innerHTML = "";
 }
