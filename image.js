@@ -4,11 +4,11 @@ let fs = require('fs');
 const height = 13;
 const width = 6;
 
-fs.readFile("dummyData.json", (err, data) => {
-    main(JSON.parse(data));
-})
+// fs.readFile("dummyData.json", (err, data) => {
+//     main(JSON.parse(data));
+// })
 
-async function main(urlDataArr) {
+var generateImage = async function(urlDataArr) {
     const urls = urlDataArr.map((urlData) => urlData.url);
     const size = urlDataArr[0].width / 4;
     console.log(urls.length);
@@ -22,24 +22,31 @@ async function main(urlDataArr) {
 
     const urlsWithCoords = setCoordinates(urls, smallFactor * largeFactor);
 
-    new Jimp(imageWidth, imageHeight, 0x0, (err, image) => {
-        const promises = [];
-        urlsWithCoords.forEach(async (urlObj, index) => {
-            promises.push(Jimp.read(urlObj.url).then(coverArt => {
-                console.log(urlObj);
-                const actualSize = urlObj.big ? size * 2 : size;
-                coverArt.resize(actualSize, actualSize);
-                image.composite(coverArt, urlObj.x * size, urlObj.y * size);
-            }));
-        });
-        Promise.all(promises).then(result => {
-            image.write('test.png');
-        });
+    new Jimp(0, 0, 0, )
+    const image = new Jimp(imageWidth, imageHeight);
         // Jimp.read(urls[0],(err, coverArt) => {
         //     image.composite(coverArt, 0, 0);
         // });
+    // });
+    console.log(image);
+    const promises = [];
+    urlsWithCoords.forEach(async (urlObj, index) => {
+        promises.push(Jimp.read(urlObj.url).then(coverArt => {
+            // console.log(urlObj);
+            const actualSize = urlObj.big ? size * 2 : size;
+            coverArt.resize(actualSize, actualSize);
+            image.composite(coverArt, urlObj.x * size, urlObj.y * size);
+        }));
     });
+    await Promise.all(promises);        
+
+    return image;
 }
+
+
+module.exports = {
+    generateImage
+};
 
 function generateBigSquares() {
     const number = 5;

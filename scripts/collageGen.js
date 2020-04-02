@@ -2,31 +2,81 @@ const height = 13;
 const width = 6;
 
 function createCollage(images) {
-    const canvas = document.getElementById('imageCanvas');
-    console.log(canvas);
-    const context = canvas.getContext('2d');
+    console.log(images);
 
-    // context.fillStyle = "#000000";
-    context.fillRect(50, 50, 100, 100);
+    fetch("http://localhost:8080/image", { 
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(images)
+    })
+        .then((response) => {
+            return response.text();
+        })
+        .then((imgData) => {
+            showImagesDiv();
+            console.log(imgData);
+            document.getElementById('resultImage').src = imgData;
+            window.location.href = imgData;
+            // downloadFile(imgData, "collage.png");
+        });
+        // .then(async response => {
+        //     console.log(response.body);
+        //     const reader = response.body.getReader();
+        //     const {done, data} = await reader.read()
+        //     console.log(data);
 
-    showImagesDiv();
-    images = removeDuplicates(images);
-    console.log(JSON.stringify(images));
-    const ratio = getRatio(images.length);
-    const canWidth = height > width ? ratio[0] : ratio[1];
-    const canHeight = height > width ? ratio[1] : ratio[0];
-    const imageSize = images[0].height;
+        //     if (done) {
+        //     }
+        // });
+    // const canvas = document.getElementById('imageCanvas');
+    // console.log(canvas);
+    // const context = canvas.getContext('2d');
 
-    canvas.height = canHeight * imageSize;
-    canvas.width = canWidth * imageSize;
+    // // context.fillStyle = "#000000";
+    // context.fillRect(50, 50, 100, 100);
 
-    populateCanvas(images, width, height, context);
+    // showImagesDiv();
+    // images = removeDuplicates(images);
+    // console.log(JSON.stringify(images));
+    // const ratio = getRatio(images.length);
+    // const canWidth = height > width ? ratio[0] : ratio[1];
+    // const canHeight = height > width ? ratio[1] : ratio[0];
+    // const imageSize = images[0].height;
+
+    // canvas.height = canHeight * imageSize;
+    // canvas.width = canWidth * imageSize;
+
+    // populateCanvas(images, width, height, context);
 
     // const container = document.getElementById('imageContainer');
     // images.forEach((image) => {
     //     const imageEl = createImage(image);
     //     container.appendChild(imageEl);
     // })
+}
+
+function downloadFile(data, fileName, type="image/png") {
+  // Create an invisible A element
+  const a = document.createElement("a");
+  a.style.display = "none";
+  document.body.appendChild(a);
+
+  // Set the HREF to a Blob representation of the data to be downloaded
+  a.href = window.URL.createObjectURL(
+    new Blob([data], { type })
+  );
+
+  // Use download attribute to set set desired file name
+  a.setAttribute("download", fileName);
+
+  // Trigger the download by simulating click
+  a.click();
+
+  // Cleanup
+  window.URL.revokeObjectURL(a.href);
+  document.body.removeChild(a);
 }
 
 function createImage(image) {
