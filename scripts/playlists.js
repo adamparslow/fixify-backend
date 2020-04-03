@@ -58,7 +58,8 @@ function getPlaylistTracks(href) {
 }
 
 function extractImages(songs) {
-    return songs.map((song) => song.track.album.images[0]);
+    console.log(songs);
+    return songs.map((song) => song.track.album.images[1]);
 }
 
 function showPlaylistsDiv() {
