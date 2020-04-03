@@ -18,8 +18,12 @@ function createCollage(images) {
             showImagesDiv();
             console.log(imgData);
             document.getElementById('resultImage').src = imgData;
-            window.location.href = imgData;
+            // window.location.href = imgData;
             // downloadFile(imgData, "collage.png");
+            var a = document.createElement("a"); //Create <a>
+            a.href = imgData;
+            a.download = "Image.png"; //File name Here
+            a.click(); //Downloaded file
         });
         // .then(async response => {
         //     console.log(response.body);
