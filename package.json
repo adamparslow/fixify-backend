@@ -1,0 +1,25 @@
+{
+  "name": "fixify",
+  "version": "1.0.0",
+  "description": "App that aims to fix spotify",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "jimp": "^0.9.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node server.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adamparslow/Fixify.git"
+  },
+  "author": "Adam Parslow",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adamparslow/Fixify/issues"
+  },
+  "homepage": "https://github.com/adamparslow/Fixify#readme"
+}
