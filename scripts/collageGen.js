@@ -4,7 +4,7 @@ const width = 6;
 function createCollage(images) {
     console.log(images);
 
-    fetch("http://localhost:8080/image", { 
+    fetch("https://adamparslow-fixify.glitch.me/image", { 
         method: "POST",
         headers: {
             'Content-Type': 'application/json'

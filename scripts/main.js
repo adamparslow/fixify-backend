@@ -27,7 +27,7 @@ function initSetup() {
 
     const authEndpoint = 'https://accounts.spotify.com/authorize';
     const clientId = "791fe36d332a46dfbc596adaf06d224f";
-    const redirectUri = "http://localhost:8080";
+    const redirectUri = "https://adamparslow-fixify.glitch.me/";
     const scopes = [
         "user-read-email",
         "user-read-private",
