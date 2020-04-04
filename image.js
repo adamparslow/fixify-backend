@@ -38,10 +38,13 @@ var generateImage = async function(urlDataArr) {
             const actualSize = urlObj.big ? size * 2 : size;
             coverArt.resize(actualSize, actualSize);
             image.composite(coverArt, urlObj.x * size, urlObj.y * size);
+            console.log("Processed image")
         }));
     });
     await Promise.all(promises);        
 
+    console.log("We finished")
+  
     return image;
 }
 
