@@ -10,7 +10,7 @@ const width = 6;
 
 var generateImage = async function(urlDataArr) {
     const urls = urlDataArr.map((urlData) => urlData.url);
-    const size = urlDataArr[0].width / 4;
+    const size = urlDataArr[0].width;
     console.log(urls.length);
 
     // const [smallFactor, largeFactor] = getRatio(urlDataArr.length);
@@ -31,8 +31,10 @@ var generateImage = async function(urlDataArr) {
     console.log(image);
     const promises = [];
     urlsWithCoords.forEach(async (urlObj, index) => {
+        let i = 0;
         promises.push(Jimp.read(urlObj.url).then(coverArt => {
-            // console.log(urlObj);
+            console.log("Downloaded image " + i);
+            i++;
             const actualSize = urlObj.big ? size * 2 : size;
             coverArt.resize(actualSize, actualSize);
             image.composite(coverArt, urlObj.x * size, urlObj.y * size);
