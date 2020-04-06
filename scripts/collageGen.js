@@ -1,64 +1,43 @@
-const height = 13;
-const width = 6;
+// const height = 13;
+// const width = 6;
 
-function createCollage(images) {
+async function createCollage(images) {
     console.log(images);
+    // console.log(new Jimp());
 
-    fetch("http://localhost:8080/image", { 
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(images)
-    })
-        .then((response) => {
-            return response.text();
-        })
-        .then((imgData) => {
-            showImagesDiv();
-            console.log(imgData);
-            document.getElementById('resultImage').src = imgData;
-            // window.location.href = imgData;
-            // downloadFile(imgData, "collage.png");
-            var a = document.createElement("a"); //Create <a>
-            a.href = imgData;
-            a.download = "Image.png"; //File name Here
-            a.click(); //Downloaded file
-        });
-        // .then(async response => {
-        //     console.log(response.body);
-        //     const reader = response.body.getReader();
-        //     const {done, data} = await reader.read()
-        //     console.log(data);
+    showImagesDiv();
+    const img = await generateImage(images);
+    const imgData = await img.getBase64Async(Jimp.MIME_PNG);
+    console.log(imgData);
+    document.getElementById('resultImage').src = imgData;
+    // window.location.href = imgData;
+    // downloadFile(imgData, "collage.png");
+    var a = document.createElement("a"); //Create <a>
+    a.href = imgData;
+    a.download = "Image.png"; //File name Here
+    a.click(); //Downloaded file
 
-        //     if (done) {
-        //     }
-        // });
-    // const canvas = document.getElementById('imageCanvas');
-    // console.log(canvas);
-    // const context = canvas.getContext('2d');
-
-    // // context.fillStyle = "#000000";
-    // context.fillRect(50, 50, 100, 100);
-
-    // showImagesDiv();
-    // images = removeDuplicates(images);
-    // console.log(JSON.stringify(images));
-    // const ratio = getRatio(images.length);
-    // const canWidth = height > width ? ratio[0] : ratio[1];
-    // const canHeight = height > width ? ratio[1] : ratio[0];
-    // const imageSize = images[0].height;
-
-    // canvas.height = canHeight * imageSize;
-    // canvas.width = canWidth * imageSize;
-
-    // populateCanvas(images, width, height, context);
-
-    // const container = document.getElementById('imageContainer');
-    // images.forEach((image) => {
-    //     const imageEl = createImage(image);
-    //     container.appendChild(imageEl);
+    // fetch("http://localhost:8080/image", { 
+    //     method: "POST",
+    //     headers: {
+    //         'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify(images)
     // })
+    //     .then((response) => {
+    //         return response.text();
+    //     })
+    //     .then((imgData) => {
+    //         showImagesDiv();
+    //         console.log(imgData);
+    //         document.getElementById('resultImage').src = imgData;
+    //         // window.location.href = imgData;
+    //         // downloadFile(imgData, "collage.png");
+    //         var a = document.createElement("a"); //Create <a>
+    //         a.href = imgData;
+    //         a.download = "Image.png"; //File name Here
+    //         a.click(); //Downloaded file
+    //     });
 }
 
 function downloadFile(data, fileName, type="image/png") {
