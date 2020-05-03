@@ -1,24 +1,23 @@
 <!DOCTYPE html>
 <html>
-    <head>
+    <header>
+        <link rel="stylesheet" type="text/css" href="../styles/main.css">
+        <script src="scripts/index.js" type="text/javascript"></script>
         <title>Fixify</title>
-        <script src="https://unpkg.com/jimp@0.9.8/browser/lib/jimp.js" type="text/javascript"></script>
-        <script src="scripts/main.js" type="text/javascript"></script>
-        <script src="scripts/playlists.js" type="text/javascript"></script>
-        <script src="scripts/collageGen.js" type="text/javascript"></script>
-        <script src="image.js" type="text/javascript"></script>
-        <link rel="stylesheet" type="text/css" href="style.css">
-    </head>
+    </header>
     <body>
-        <div id="authorization">
-            <a id="authBtn">Click for authorization</a>
+        <div class="header-div">
+            <h1><strong>Fixify</strong></h1>
         </div>
-        <div id="postAuth">
-            <button onclick="getUserInformation()">User</button>
-            <button onclick="getPlaylists()">Playlists</button>
-            <div id="playlistContainer"></div>
-            <div id="imageContainer">
-                <img src="#" id="resultImage">
+        <div class="button-column">
+            <div class="button-row">
+                <a id="authBtn" class="feature-button">Authorise</a>
+            </div>
+        </div>
+        <div class="footer">
+            <div class="footer-background">
+                <p>Adam Parslow</p>
+                <p>Made in 2020</p>
             </div>
         </div>
     </body>

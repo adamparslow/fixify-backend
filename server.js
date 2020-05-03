@@ -4,7 +4,7 @@ let Jimp = require('jimp');
 const fs = require('fs');
 const path = require('path');
 const app = express();
-const image = require('./image');
+const image = require('./oldSIte/image');
 
 app.use(express.static('client/build'));
 app.use(express.json());
@@ -21,6 +21,10 @@ app.post("/image", async (req, res) => {
     res.send(result);
 });
 
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "index.html"));
+})
+
 app.get("*", (req, res) => {
     let url = req.originalUrl.slice(1);
     if (url === "") url = "index.html";
@@ -31,6 +35,7 @@ app.get("*", (req, res) => {
     //     res.end(data);
     // });
 });
+
 
 
 app.listen(port, () => {
