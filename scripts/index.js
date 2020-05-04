@@ -50,7 +50,13 @@ function createAuthButton() {
 
 function createFeatureButtons() {
     const buttonBox = document.getElementById('button-box');
-    buttonBox.innerText = "You did it";
+    for (const pageData of config.pages) {
+        const button = document.createElement('a');
+        button.href = pageData.url;
+        button.className = "feature-button";
+        button.innerText = pageData.title; 
+        buttonBox.appendChild(button);
+    }
 }
 
 let token = "";
