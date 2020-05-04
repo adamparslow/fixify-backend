@@ -4,7 +4,7 @@ let Jimp = require('jimp');
 const fs = require('fs');
 const path = require('path');
 const app = express();
-const image = require('./oldSIte/image');
+const image = require('./oldSite/image');
 
 app.use(express.static('client/build'));
 app.use(express.json());

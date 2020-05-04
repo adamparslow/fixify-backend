@@ -1,4 +1,4 @@
-import config from './config';
+import config from './config.js';
 
 function getHash () {
     const hash = window.location.hash
@@ -18,16 +18,18 @@ function getHash () {
 function initSetup() {
     const hash = getHash();
 
-    const authBtn = document.getElementById("authBtn");
     if (JSON.stringify(hash) !== JSON.stringify({})) {
-        authBtn.style.visibility = 'hidden';
         token = hash.access_token;
+        createFeatureButtons();
         return;
+    } else {
+        createAuthButton();
     }
 
-    // const authEndpoint = 'https://accounts.spotify.com/authorize';
-    // const clientId = "791fe36d332a46dfbc596adaf06d224f";
-    // const redirectUri = "http://localhost:8080";
+    authBtn.href = authUrl;
+}
+
+function createAuthButton() {
     const scopes = [
         "playlist-read-collaborative",
         "playlist-read-private"
@@ -38,7 +40,17 @@ function initSetup() {
     `&redirect_uri=${config.redirectUri}` +
     `&scope=${scopes.join("%20")}`;
 
-    authBtn.href = authUrl;
+    const buttonBox = document.getElementById('button-box');
+    const button = document.createElement('a');
+    button.href = authUrl;
+    button.className = "feature-button";
+    button.innerText = "Authorise";
+    buttonBox.appendChild(button);
+}
+
+function createFeatureButtons() {
+    const buttonBox = document.getElementById('button-box');
+    buttonBox.innerText = "You did it";
 }
 
 let token = "";
