@@ -19,7 +19,7 @@ function initSetup() {
     const hash = getHash();
 
     if (JSON.stringify(hash) !== JSON.stringify({})) {
-        token = hash.access_token;
+        moveTokenToStorage(hash.access_token);
         createFeatureButtons();
         return;
     } else {
@@ -59,7 +59,10 @@ function createFeatureButtons() {
     }
 }
 
-let token = "";
+function moveTokenToStorage(token) {
+    localStorage.setItem("token", token);
+}
+
 window.addEventListener('DOMContentLoaded', () => {
     initSetup();
 });

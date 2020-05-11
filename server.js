@@ -22,6 +22,10 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "html/index.html"));
 });
 
+app.get("/feature/collage", (req, res) => {
+    res.sendFile(path.join(__dirname, "html/collage.html"));
+});
+
 app.get("/feature/*", (req, res) => {
     console.log(req.originalUrl);
     res.send("Not yet implemented");
