@@ -72,6 +72,7 @@ async function formHandler (event) {
     let images = await getImages(playlist.href, getSize(formData.size));
 
     // Remove repeated images
+    console.log(images.length);
     if (formData.repeats) {
         images = removeDuplicates(images);
     }
@@ -82,8 +83,10 @@ async function formHandler (event) {
     }
 
     // Remove excess images
+    console.log(images.length);
     let numberOfImages = formData.width * formData.height;
     images.splice(numberOfImages);
+    console.log(images.length);
 
     // Generate image
     const collage = await generateImage(images, formData.width, formData.height, formData['bigger-boxes']);

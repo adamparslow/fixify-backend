@@ -9,7 +9,7 @@ async function generateImage(urlDataArr, width, height, biggerBoxes) {
     const imageWidth = width * size;
     const imageHeight = height * size;
 
-    const urlsWithCoords = setCoordinates(urls, width * height, width, height, biggerBoxes);
+    const urlsWithCoords = setCoordinates(urls, width, height, biggerBoxes);
 
     const image = new Jimp(imageWidth, imageHeight);
 
@@ -26,51 +26,91 @@ async function generateImage(urlDataArr, width, height, biggerBoxes) {
     return image;
 }
 
-function setCoordinates(urls, maxSize, width, height, biggerBoxes) {
-    console.log(width);
-    console.log(maxSize);
+function setCoordinates(urls, width, height, biggerBoxes) {
     const squares = generateBigSquares(width, height, biggerBoxes);
-    const taken = [];
-    for(let i = 0; i < maxSize; i++) {
-        taken[i] = false;
-    }
-    console.log(taken);
-
     const urlsWithCoords = [];
+
+    console.log(urls.length);
+
+    const taken = [];
+    for (let x = 0; x < width; x++) {
+        taken[x] = [];
+        for (let y = 0; y < height; y++) {
+            taken[x][y] = false;
+        }
+    }
+
+    // Set the taken values for the squares
+    for (const square of squares) {
+        taken[square.x][square.y] = true;
+        taken[square.x+1][square.y] = true;
+        taken[square.x][square.y+1] = true;
+        taken[square.x+1][square.y+1] = true;
+
+        urlsWithCoords.push({
+            x: square.x,
+            y: square.y,
+            big: true,
+            url: urls[square.y*width + square.x]
+        });
+    }
+
+    // Set the rest with taken offset
     urls.forEach((url, index) => {
         let pos = index;
-        while (taken[pos]) pos++;
-        console.log(pos);
-
-        const x = pos % width;
-        const y = Math.floor(pos / width);
-        let big = false;
-        taken[pos] = true;
+        let x = index % width;
+        let y = Math.floor(pos / width);
 
         if (containsCoord(x, y, squares)) {
-            taken[pos + 1] = true;
-            taken[pos + width] = true;
-            taken[pos + width + 1] = true;
-            big = true;
+            return;
         }
+        
+        while (taken[x][y]) {
+            x++;
+            if (x === Number(width)) {
+                x = 0;
+                y++;
+            }
+        }
+
+        taken[x][y] = true;
 
         urlsWithCoords.push({
             x,
             y,
-            big,
+            big: false,
             url
         });
     });
-    console.log(taken);
     return urlsWithCoords;
 }
 
 function generateBigSquares(width, height, biggerBoxes) {
     const squares = [];
+    const taken = [];
+    for (let x = 0; x < width; x++) {
+        taken[x] = [];
+        for (let y = 0; y < height; y++) {
+            taken[x][y] = false;
+        }
+    }
+
     for (let i = 0; i < biggerBoxes; i++) {
+        let x = Math.floor(Math.random() * (width - 1));
+        let y = Math.floor(Math.random() * (height - 1));
+
+        while (taken[x][y] || taken[x+1][y] || taken[x][y+1] || taken[x+1][y+1]) {
+            x = Math.floor(Math.random() * (width - 1));
+            y = Math.floor(Math.random() * (height - 1));
+        }
+        taken[x][y] = true;
+        taken[x+1][y] = true;
+        taken[x][y+1] = true;
+        taken[x+1][y+1] = true;
+
         squares.push({
-            x: Math.floor(Math.random() * (width - 1)),
-            y: Math.floor(Math.random() * (height - 1))
+            x,
+            y
         });
     }
     return squares;
