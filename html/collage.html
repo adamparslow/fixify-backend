@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <header>
+        <script src="https://unpkg.com/jimp@0.9.8/browser/lib/jimp.js" type="text/javascript"></script>
+        <link rel="stylesheet" type="text/css" href="../styles/main.css">
+        <link rel="stylesheet" type="text/css" href="../styles/collage.css">
+        <link rel="stylesheet" type="text/css" href="../styles/autocomplete.css"> 
+        <script src="../scripts/collage/index.js" type="module"></script>
+        <title>Fixify</title>
+    </header>
+    <body>
+        <div class="button-row">
+            <div class="collage-center">
+                <form autocomplete="off" id="image-form">
+                    <div class="autocomplete" style="width:300px;">
+                        <input id="playlist-auto" type="text" name="playlist" placeholder="Playlist" required>
+                    </div>
+                    <div>
+                        <label for="width">Width</label>
+                        <input type="number" name="width" value="6" />
+                    </div>
+                    <div>
+                        <label for="height">Height</label>
+                        <input type="number" name="height" value="13" />
+                    </div>
+                    <div>
+                        <label for="bigger-boxes">Number of bigger boxes</label>
+                        <input type="number" name="bigger-boxes" value="5" />
+                    </div>
+                    <div>
+                        <input type="checkbox" name="random" checked/>
+                        <label for="random">Random sort</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="repeats" checked/>
+                        <label for="repeats">Remove repeated images</label>
+                    </div>
+                    <p>Size</p>
+                    <div class="size-selector">
+                        <input type="radio" id="small" name="size" value="small">
+                        <label for="small">Small</label><br>
+                        <input type="radio" id="medium" name="size" value="medium" checked>
+                        <label for="medium">Medium</label><br>
+                        <input type="radio" id="large" name="size" value="large">
+                        <label for="large">Large</label>
+                    </div>
+                    <button type="submit">Generate Image</button>
+                </form>
+                <!-- <canvas id="image-canvas"></canvas> -->
+                <img id="image-img" />
+            </div>
+        </div>
+    </body>
+</html>
