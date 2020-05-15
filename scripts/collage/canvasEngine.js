@@ -10,10 +10,6 @@ export function init(width, height) {
 }
 
 export function drawOnCanvas(img64, x, y) {
-    console.log(img64);
-    console.log(x);
-    console.log(y);
-
     const img = new Image();
 
     img.onload = () => {
