@@ -90,13 +90,6 @@ async function formHandler (event) {
 
     // Generate image
     const collage = await generateImage(images, formData.width, formData.height, formData['bigger-boxes']);
-
-    // DEBUG
-    const img = document.getElementById('image-img');
-    img.width = formData.width * images[0].height/2;
-    img.height = formData.height * images[0].height/2;
-    img.src = await collage.getBase64Async(Jimp.MIME_PNG);
-    // DEBUG
 }
 
 function removeDuplicates(images) {
