@@ -72,7 +72,6 @@ async function formHandler (event) {
     let images = await getImages(playlist.href, getSize(formData.size));
 
     // Remove repeated images
-    console.log(images.length);
     if (formData.repeats) {
         images = removeDuplicates(images);
     }
@@ -83,21 +82,29 @@ async function formHandler (event) {
     }
 
     // Remove excess images
-    console.log(images.length);
     let numberOfImages = formData.width * formData.height;
     images.splice(numberOfImages);
-    console.log(images.length);
 
     // Generate image
     const collage = await generateImage(images, formData.width, formData.height, formData['bigger-boxes']);
+    const collage64 = await collage.getBase64Async(Jimp.MIME_PNG);
 
-    // DEBUG
-    const img = document.getElementById('image-img');
-    img.width = formData.width * images[0].height/2;
-    img.height = formData.height * images[0].height/2;
-    img.src = await collage.getBase64Async(Jimp.MIME_PNG);
-    // DEBUG
+    console.log(collage64);
+
+    const downloadButton = document.getElementById('download-button');
+    downloadButton.disabled = false;
+    downloadButton.onclick = () => {
+        downloadFile(collage64, "image.png");
+    };
 }
+
+function downloadFile(data, fileName) {
+    const a = document.createElement("a"); //Create <a>
+    a.href = data;
+    a.download = fileName; //File name Here
+    a.click(); //Downloaded file
+}
+
 
 function removeDuplicates(images) {
     return images.map(image => image.url)
