@@ -4,7 +4,6 @@
         <script src="https://unpkg.com/jimp@0.9.8/browser/lib/jimp.js" type="text/javascript"></script>
         <link rel="stylesheet" type="text/css" href="../styles/main.css">
         <link rel="stylesheet" type="text/css" href="../styles/collage.css">
-        <link rel="stylesheet" type="text/css" href="../styles/autocomplete.css"> 
         <script src="../scripts/collage/index.js" type="module"></script>
         <title>Fixify</title>
     </header>
@@ -12,8 +11,9 @@
         <div class="button-row">
             <div class="collage-center">
                 <form autocomplete="off" id="image-form">
-                    <div class="autocomplete" style="width:300px;">
-                        <input id="playlist-auto" type="text" name="playlist" placeholder="Playlist" required>
+                    <div>
+                        <label for="playlist">Playlist:</label>
+                        <select id="playlist" name="playlist"></select>
                     </div>
                     <div>
                         <label for="width">Width</label>
