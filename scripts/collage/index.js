@@ -1,5 +1,4 @@
 import config from '../config.js';
-import autocomplete from './autocomplete.js';
 import generateImage from './imageGen.js';
 
 let playlistInfo = [];
@@ -53,8 +52,16 @@ function getSize(sizeWord) {
 }
 
 function generatePlaylistContainer() {
-    const acFill = playlistInfo.map(item => item.name);
-    autocomplete(document.getElementById('playlist-auto'), acFill);
+    // const acFill = playlistInfo.map(item => item.name);
+    // autocomplete(document.getElementById('playlist-auto'), acFill);
+
+    const select = document.getElementById('playlist');
+    for (const playlist of playlistInfo) {
+        const option = document.createElement('option');
+        option.value = playlist.name;
+        option.innerHTML = playlist.name;
+        select.appendChild(option);
+    }
 }
 
 async function formHandler (event) {
@@ -142,13 +149,13 @@ window.addEventListener('DOMContentLoaded', async () => {
     await getPlaylists();
     generatePlaylistContainer();
 
-    const auto = document.getElementById('playlist-auto');
-    auto.addEventListener('keyup', event => {
-        if (event.keyCode == 13) {
-            event.preventDefault();
-            document.getElementById('playlist-submit').click();
-        }
-    });
+    // const auto = document.getElementById('playlist-auto');
+    // auto.addEventListener('keyup', event => {
+    //     if (event.keyCode == 13) {
+    //         event.preventDefault();
+    //         document.getElementById('playlist-submit').click();
+    //     }
+    // });
 
     const imageForm = document.getElementById('image-form');
     imageForm.addEventListener('submit', formHandler);
