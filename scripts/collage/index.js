@@ -84,12 +84,11 @@ async function formHandler (event) {
     // Remove excess images
     let numberOfImages = formData.width * formData.height;
     images.splice(numberOfImages);
+    console.log(images);
 
     // Generate image
     const collage = await generateImage(images, formData.width, formData.height, formData['bigger-boxes']);
     const collage64 = await collage.getBase64Async(Jimp.MIME_PNG);
-
-    console.log(collage64);
 
     const downloadButton = document.getElementById('download-button');
     downloadButton.disabled = false;
@@ -105,8 +104,12 @@ function downloadFile(data, fileName) {
     a.click(); //Downloaded file
 }
 
+function removeUndefined(images) {
+    return images.filter(image => image);
+}
 
 function removeDuplicates(images) {
+    images = removeUndefined(images);
     return images.map(image => image.url)
         // Check if the urls first index matches the current index, if not, give undefined, otherwise return index
         .map((url, index, final) => final.indexOf(url) === index && index)
