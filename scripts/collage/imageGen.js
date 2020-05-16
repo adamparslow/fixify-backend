@@ -25,7 +25,8 @@ async function generateImage(urlDataArr, width, height, biggerBoxes) {
             image.composite(coverArt, urlObj.x * size, urlObj.y * size);
 
             // Integrating with the canvas
-            coverArt.getBase64Async(jimp.MIME_PNG).then(img => canvasEngine.draw(img, urlObj.x * size, urlObj.y * size));
+            coverArt.getBase64Async(jimp.MIME_PNG)
+                .then(img => canvasEngine.draw(img, urlObj.x * size, urlObj.y * size));
         }));
     });
     await Promise.all(promises);        
@@ -34,7 +35,7 @@ async function generateImage(urlDataArr, width, height, biggerBoxes) {
 }
 
 function setCoordinates(urls, width, height, biggerBoxes) {
-    const squares = generateBigSquares(width, height, biggerBoxes);
+    const squares = generateBigSquares(width, height, biggerBoxes, urls.length);
     const urlsWithCoords = [];
 
     const taken = [];
@@ -95,7 +96,7 @@ function setCoordinates(urls, width, height, biggerBoxes) {
     return urlsWithCoords;
 }
 
-function generateBigSquares(width, height, biggerBoxes) {
+function generateBigSquares(width, height, biggerBoxes, arrayLength) {
     const squares = [];
     const taken = [];
     for (let x = 0; x < width; x++) {
@@ -108,14 +109,15 @@ function generateBigSquares(width, height, biggerBoxes) {
     for (let i = 0; i < biggerBoxes; i++) {
         let x = Math.floor(Math.random() * (width - 1));
         let y = Math.floor(Math.random() * (height - 1));
-        const limit = 5;
+        const limit = 100;
         let i = 0;
 
-        while ((taken[x][y] || taken[x+1][y] || taken[x][y+1] || taken[x+1][y+1]) && i < limit) {
+        while ((taken[x][y] || taken[x+1][y] || taken[x][y+1] || taken[x+1][y+1] || y*width+x >= arrayLength) && !(i == limit)) {
             x = Math.floor(Math.random() * (width - 1));
             y = Math.floor(Math.random() * (height - 1));
             i++;
         }
+
         taken[x][y] = true;
         taken[x+1][y] = true;
         taken[x][y+1] = true;
