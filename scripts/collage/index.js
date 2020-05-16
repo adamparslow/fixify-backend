@@ -1,5 +1,4 @@
 import config from '../config.js';
-import autocomplete from './autocomplete.js';
 import generateImage from './imageGen.js';
 
 let playlistInfo = [];

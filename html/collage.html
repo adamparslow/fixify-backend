@@ -12,8 +12,9 @@
             <div class="collage-center">
                 <form autocomplete="off" id="image-form">
                     <div>
-                        <label for="playlist">Playlist:</label>
-                        <select id="playlist" name="playlist"></select>
+                        <select id="playlist" name="playlist" required>
+                            <option value="" disabled selected>Select a playlist</option>
+                        </select>
                     </div>
                     <div>
                         <label for="width">Width</label>
@@ -35,7 +36,7 @@
                         <input type="checkbox" name="repeats" checked/>
                         <label for="repeats">Remove repeated images</label>
                     </div>
-                    <p>Size</p>
+                    <p>Image Size</p>
                     <div class="size-selector">
                         <input type="radio" id="small" name="size" value="small">
                         <label for="small">Small</label><br>
