@@ -87,6 +87,11 @@ async function formHandler (event) {
         images = removeDuplicates(images);
     }
 
+    // Fill with duplicates 
+    if (formData.fill) {
+        images = fillWithDuplicates(images, formData.width * formData.height);
+    }
+
     // Randomly sort the list
     if (formData.random) {
         images = shuffle(images);
@@ -149,7 +154,19 @@ function shuffle(array) {
     return array;
 }
 
-function advancedClickHandler(event) {
+function fillWithDuplicates(images, finalSize) {
+    let i = 0;
+    let originalLen = images.length;
+    let newImages = shuffle([...images]);
+    while(images.length < finalSize) {
+        images.push(newImages[i % originalLen]);
+        i++;
+    }
+
+    return images;
+}
+
+function advancedClickHandler() {
     const box = document.getElementById('advanced-box');
     box.style.display = box.style.display === "block" ? "none" : "block";
 }
