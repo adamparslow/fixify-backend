@@ -11,7 +11,7 @@ async function generateImage(urlDataArr, width, height, biggerBoxes) {
     const imageWidth = width * size;
     const imageHeight = height * size;
 
-    canvasEngine.init(imageWidth, imageHeight);
+    canvasEngine.init(imageWidth, imageHeight, size);
 
     const urlsWithCoords = setCoordinates(urls, width, height, biggerBoxes);
 
@@ -26,7 +26,7 @@ async function generateImage(urlDataArr, width, height, biggerBoxes) {
 
             // Integrating with the canvas
             coverArt.getBase64Async(jimp.MIME_PNG)
-                .then(img => canvasEngine.draw(img, urlObj.x * size, urlObj.y * size));
+                .then(img => canvasEngine.draw(img, urlObj.x, urlObj.y, urlObj.big));
         }));
     });
     await Promise.all(promises);        
