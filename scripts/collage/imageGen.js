@@ -118,6 +118,10 @@ function generateBigSquares(width, height, biggerBoxes, arrayLength) {
             i++;
         }
 
+        if (i === limit) {
+            continue;
+        }
+
         taken[x][y] = true;
         taken[x+1][y] = true;
         taken[x][y+1] = true;

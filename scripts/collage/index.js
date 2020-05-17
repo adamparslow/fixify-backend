@@ -149,6 +149,11 @@ function shuffle(array) {
     return array;
 }
 
+function advancedClickHandler(event) {
+    const box = document.getElementById('advanced-box');
+    box.style.display = box.style.display === "block" ? "none" : "block";
+}
+
 window.addEventListener('DOMContentLoaded', async () => {
     await getPlaylists();
     generatePlaylistContainer();
@@ -163,4 +168,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     const imageForm = document.getElementById('image-form');
     imageForm.addEventListener('submit', formHandler);
+
+    const advancedBtn = document.getElementById('advanced-button');
+    advancedBtn.addEventListener('click', advancedClickHandler);
 });
