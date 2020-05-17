@@ -10,7 +10,7 @@ const port = process.env.PORT || 8080;
 
 var client_id = '791fe36d332a46dfbc596adaf06d224f'; // Your client id
 var client_secret = 'a4fb8056d3b04b42aba8ec849fe413e5'; // Your secret
-var redirect_uri = 'https://adamparslow-fixify.glitch.me/callback'; // Your redirect uri
+var redirect_uri = 'http://localhost:8080/callback'; // Your redirect uri
 
 var stateKey = 'spotify_auth_state';
 
