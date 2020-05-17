@@ -42,11 +42,11 @@ async function getImages(href, size) {
 
 function getSize(sizeWord) {
     switch(sizeWord) {
-        case "small": 
+        case "low": 
             return 2;
         case "medium": 
             return 1;
-        case "large": 
+        case "high": 
             return 0;
     }
 }
@@ -73,6 +73,10 @@ async function formHandler (event) {
     for (var pair of preFormData.entries()) {
         formData[pair[0]] = pair[1];
     }
+    console.log(formData);
+    const [width, height] = formData.ratio.split("x");
+    formData.width = width;
+    formData.height = height;
 
     // Get image data
     const playlist = playlistInfo.filter((playlist) => playlist.name === formData.playlist)[0];

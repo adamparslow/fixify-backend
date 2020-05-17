@@ -17,13 +17,24 @@
                         </select>
                     </div>
                     <div>
+                        <select id="ratio" name="ratio" required>
+                            <option value="" disabled selected>Select a size</option>
+                            <option value="16x9">Laptop (16x9) - Landscape</option>
+                            <option value="9x16">Laptop (16x9) - Portrait</option>
+                            <option value="4x3">Tablet (4x3) - Landscape</option>
+                            <option value="3x4">Tablet (4x3) - Portrait</option>
+                            <option value="13x6">Phone (6x13) - Landscape</option>
+                            <option value="6x13">Phone (6x13) - Portrait</option>
+                        </select>
+                    </div>
+                    <!-- <div>
                         <label for="width">Width</label>
                         <input type="number" name="width" value="6" />
                     </div>
                     <div>
                         <label for="height">Height</label>
                         <input type="number" name="height" value="13" />
-                    </div>
+                    </div> -->
                     <div>
                         <label for="bigger-boxes">Number of bigger boxes</label>
                         <input type="number" name="bigger-boxes" value="5" />
@@ -36,14 +47,14 @@
                         <input type="checkbox" name="repeats" checked/>
                         <label for="repeats">Remove repeated images</label>
                     </div>
-                    <p>Image Size</p>
+                    <p>Image Quality</p>
                     <div class="size-selector">
-                        <input type="radio" id="small" name="size" value="small">
-                        <label for="small">Small</label><br>
+                        <input type="radio" id="low" name="size" value="low">
+                        <label for="small">Low</label><br>
                         <input type="radio" id="medium" name="size" value="medium" checked>
                         <label for="medium">Medium</label><br>
-                        <input type="radio" id="large" name="size" value="large">
-                        <label for="large">Large</label>
+                        <input type="radio" id="high" name="size" value="high">
+                        <label for="large">High</label>
                     </div>
                     <button id="playlist-submit" type="submit">Generate Image</button>
                     <button id="download-button" type="button" disabled>Download</button>
