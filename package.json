@@ -4,8 +4,10 @@
   "description": "App that aims to fix spotify",
   "main": "server.js",
   "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
-    "jimp": "^0.9.5"
+    "request": "^2.88.2"
   },
   "devDependencies": {},
   "scripts": {

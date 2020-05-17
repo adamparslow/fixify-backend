@@ -4,7 +4,7 @@ import generateImage from './imageGen.js';
 let playlistInfo = [];
 
 async function getPlaylists(next) {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
     let data = {
         headers: {
             Authorization: 'Bearer ' + token
@@ -25,7 +25,7 @@ async function getPlaylists(next) {
 }
 
 async function getImages(href, size) {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
     const data = {
         headers: {
             Authorization: 'Bearer ' + token
