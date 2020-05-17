@@ -11,7 +11,7 @@ function getHash () {
             }
             return initial;
         }, {});
-    window.location.hash = "";
+    history.pushState("", document.title, window.location.pathname + window.location.search);
     return hash;
 }
 
@@ -19,14 +19,14 @@ function initSetup() {
     const hash = getHash();
 
     if (JSON.stringify(hash) !== JSON.stringify({})) {
-        moveTokenToStorage(hash.access_token);
+        console.log(hash.access_token);
+        console.log(hash.refresh_token);
+        moveTokensToStorage(hash.access_token);
         createFeatureButtons();
         return;
     } else {
         createAuthButton();
     }
-
-    authBtn.href = authUrl;
 }
 
 function createAuthButton() {
@@ -42,7 +42,7 @@ function createAuthButton() {
 
     const buttonBox = document.getElementById('button-box');
     const button = document.createElement('a');
-    button.href = authUrl;
+    button.href = '/login';
     button.className = "feature-button";
     button.innerText = "Authorise";
     buttonBox.appendChild(button);
@@ -59,8 +59,9 @@ function createFeatureButtons() {
     }
 }
 
-function moveTokenToStorage(token) {
-    localStorage.setItem("token", token);
+function moveTokensToStorage(access, refresh) {
+    localStorage.setItem("access_token", access);
+    localStorage.setItem("refresh_token", refresh);
 }
 
 window.addEventListener('DOMContentLoaded', () => {
