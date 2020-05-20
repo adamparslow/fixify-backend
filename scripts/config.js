@@ -2,7 +2,7 @@ const config = {
     spotifyAPI: "https://api.spotify.com/",
     spotifyAuth: "https://accounts.spotify.com/authorize",
     clientId: "791fe36d332a46dfbc596adaf06d224f",
-    redirectUri: "https://adamparslow-fixify.glitch.me/",
+    redirectUri: "http://localhost:8080",
 
     pages: [
         {

@@ -73,10 +73,12 @@ async function formHandler (event) {
     for (var pair of preFormData.entries()) {
         formData[pair[0]] = pair[1];
     }
-    console.log(formData);
-    const [width, height] = formData.ratio.split("x");
-    formData.width = width;
-    formData.height = height;
+
+    if (!formData.custom) {
+        const [width, height] = formData.ratio.split("x");
+        formData.width = width;
+        formData.height = height;
+    }
 
     // Get image data
     const playlist = playlistInfo.filter((playlist) => playlist.name === formData.playlist)[0];
@@ -171,21 +173,24 @@ function advancedClickHandler() {
     box.style.display = box.style.display === "block" ? "none" : "block";
 }
 
+function toggleCustomDisplay(event) {
+    const customDiv = document.getElementById('custom');
+    const ratioField = document.getElementById('ratio');
+    const checked = event.target.checked;
+    customDiv.style.display = checked ? "block" : "none";
+    ratioField.disabled = checked;
+}
+
 window.addEventListener('DOMContentLoaded', async () => {
     await getPlaylists();
     generatePlaylistContainer();
-
-    // const auto = document.getElementById('playlist-auto');
-    // auto.addEventListener('keyup', event => {
-    //     if (event.keyCode == 13) {
-    //         event.preventDefault();
-    //         document.getElementById('playlist-submit').click();
-    //     }
-    // });
 
     const imageForm = document.getElementById('image-form');
     imageForm.addEventListener('submit', formHandler);
 
     const advancedBtn = document.getElementById('advanced-button');
     advancedBtn.addEventListener('click', advancedClickHandler);
+
+    const customCheckbox = document.getElementById('custom-checkbox');
+    customCheckbox.addEventListener('change', toggleCustomDisplay);
 });
