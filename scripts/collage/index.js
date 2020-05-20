@@ -73,10 +73,12 @@ async function formHandler (event) {
     for (var pair of preFormData.entries()) {
         formData[pair[0]] = pair[1];
     }
-    console.log(formData);
-    const [width, height] = formData.ratio.split("x");
-    formData.width = width;
-    formData.height = height;
+
+    if (!formData.custom) {
+        const [width, height] = formData.ratio.split("x");
+        formData.width = width;
+        formData.height = height;
+    }
 
     // Get image data
     const playlist = playlistInfo.filter((playlist) => playlist.name === formData.playlist)[0];
@@ -173,8 +175,10 @@ function advancedClickHandler() {
 
 function toggleCustomDisplay(event) {
     const customDiv = document.getElementById('custom');
+    const ratioField = document.getElementById('ratio');
     const checked = event.target.checked;
     customDiv.style.display = checked ? "block" : "none";
+    ratioField.disabled = checked;
 }
 
 window.addEventListener('DOMContentLoaded', async () => {
