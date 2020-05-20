@@ -171,21 +171,22 @@ function advancedClickHandler() {
     box.style.display = box.style.display === "block" ? "none" : "block";
 }
 
+function toggleCustomDisplay(event) {
+    const customDiv = document.getElementById('custom');
+    const checked = event.target.checked;
+    customDiv.style.display = checked ? "block" : "none";
+}
+
 window.addEventListener('DOMContentLoaded', async () => {
     await getPlaylists();
     generatePlaylistContainer();
-
-    // const auto = document.getElementById('playlist-auto');
-    // auto.addEventListener('keyup', event => {
-    //     if (event.keyCode == 13) {
-    //         event.preventDefault();
-    //         document.getElementById('playlist-submit').click();
-    //     }
-    // });
 
     const imageForm = document.getElementById('image-form');
     imageForm.addEventListener('submit', formHandler);
 
     const advancedBtn = document.getElementById('advanced-button');
     advancedBtn.addEventListener('click', advancedClickHandler);
+
+    const customCheckbox = document.getElementById('custom-checkbox');
+    customCheckbox.addEventListener('change', toggleCustomDisplay);
 });
