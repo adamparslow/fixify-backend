@@ -21,7 +21,7 @@ function initSetup() {
     if (JSON.stringify(hash) !== JSON.stringify({})) {
         console.log(hash.access_token);
         console.log(hash.refresh_token);
-        moveTokensToStorage(hash.access_token);
+        moveTokensToStorage(hash.access_token, hash.refresh_token);
         createFeatureButtons();
         return;
     } else {
