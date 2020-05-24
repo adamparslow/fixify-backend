@@ -104,7 +104,6 @@ async function formHandler (event) {
     // Remove excess images
     let numberOfImages = formData.width * formData.height;
     images.splice(numberOfImages);
-    console.log(images);
 
     // Generate image
     const collage = await generateImage(images, formData.width, formData.height, formData['bigger-boxes']);

@@ -1,3 +1,5 @@
+import tokenHandler from './tokenHandler';
+
 async function getPlaylists() {
     const url = next !== undefined ? next : 
         config.spotifyAPI + 'v1/me/playlists?limit=50';
@@ -42,12 +44,12 @@ async function makeApiRequest(url) {
 
 async function refreshToken() {
     const accessToken = getNewAccessToken();
-    localStorage.setItem('access_token', accessToken);
+
+    tokenHandler.setAccessToken(accessToken);
 }
 
 async function getNewAccessToken() {
     const refreshToken = localStorage.getItem('refresh_token');
-    console.log(refreshToken);
     const url = `/refresh_token?refresh_token=${refreshToken}`;
     const response = await fetch(url, getData());
     const json = await response.json();
