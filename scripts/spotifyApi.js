@@ -1,4 +1,4 @@
-import tokenHandler from './tokenHandler';
+import tokenHandler from './tokenHandler.js';
 
 async function getPlaylists() {
     const url = next !== undefined ? next : 
@@ -50,7 +50,7 @@ async function refreshToken() {
 
 async function getNewAccessToken() {
     const refreshToken = localStorage.getItem('refresh_token');
-    const url = `/refresh_token?refresh_token=${refreshToken}`;
+    const url = `/auth/refresh_token?refresh_token=${refreshToken}`;
     const response = await fetch(url, getData());
     const json = await response.json();
     return json.access_token;

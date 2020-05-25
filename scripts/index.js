@@ -11,7 +11,8 @@ function initSetup() {
 }
 
 function generateButtons() {
-    if (tokenHandler.getRefreshToken() !== null) {
+    const refreshToken = tokenHandler.getRefreshToken();
+    if (refreshToken !== null && refreshToken !== "undefined") {
         featureButtonGenerator.createFeatureButtons();
     } else {
         featureButtonGenerator.createAuthButton();

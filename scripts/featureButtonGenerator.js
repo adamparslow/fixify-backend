@@ -3,7 +3,7 @@ import config from './config.js';
 function createAuthButton() {
     const buttonBox = document.getElementById('button-box');
     const button = document.createElement('a');
-    button.href = '/login';
+    button.href = '/auth/login';
     button.className = "feature-button";
     button.innerText = "Authorise";
     buttonBox.appendChild(button);
