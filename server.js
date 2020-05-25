@@ -4,6 +4,7 @@ var request = require('request'); // "Request" library
 var cors = require('cors');
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
+const megamixStorage = require('./megamixStorage');
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -13,6 +14,8 @@ var client_secret = 'a4fb8056d3b04b42aba8ec849fe413e5'; // Your secret
 var redirect_uri = 'http://localhost:8080/callback'; // Your redirect uri
 
 var stateKey = 'spotify_auth_state';
+
+megamixStorage.init();
 
 app.use(express.static('client/build'))
     .use(express.json())
@@ -34,6 +37,17 @@ app.get('/login', (req, res) => {
         state: state
       }));
 });
+
+var generateRandomString = function(length) {
+  var text = '';
+  var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+  for (var i = 0; i < length; i++) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return text;
+};
+
 
 app.get('/callback', (req, res) => {
     // your application requests refresh and access tokens
@@ -67,17 +81,6 @@ app.get('/callback', (req, res) => {
             if (!error && response.statusCode === 200) {
                 var access_token = body.access_token,
                     refresh_token = body.refresh_token;
-        
-                // var options = {
-                //     url: 'https://api.spotify.com/v1/me',
-                //     headers: { 'Authorization': 'Bearer ' + access_token },
-                //     json: true
-                // };
-        
-                // use the access token to access the Spotify Web API
-                // request.get(options, function(error, response, body) {
-                //     console.log(body);
-                // });
         
                 // we can also pass the token to the browser to make requests from there
                 res.redirect('/#' +
@@ -118,15 +121,25 @@ app.get('/refresh_token', (req, res) => {
   });
 });
 
-var generateRandomString = function(length) {
-  var text = '';
-  var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+// Expect refresh_token and user_id
+app.post('/save_megamix', (req, res) => {
+    const refreshToken = req.body.refresh_token;
+    const userId = req.body.user_id;
 
-  for (var i = 0; i < length; i++) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-  }
-  return text;
-};
+    if (!refreshToken || !userId) {
+        res.sendStatus(400);
+    }
+
+    megamixStorage.saveMegamix(refreshToken, userId);
+
+    res.send(refreshToken);
+});
+
+app.post('/get_megamixes', (req, res) => {
+    megamixStorage.getMegamixes();
+
+    res.sendStatus(200);
+})
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "html/index.html"));
