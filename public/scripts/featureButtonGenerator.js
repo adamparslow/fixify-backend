@@ -1,4 +1,4 @@
-import config from './config.js';
+import config from './config.mjs';
 
 function createAuthButton() {
     const buttonBox = document.getElementById('button-box');

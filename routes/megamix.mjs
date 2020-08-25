@@ -1,7 +1,9 @@
-const express = require('express');
-const router = express.Router();
+import express from 'express';
 
-const megamixStorage = require('../serverScripts/megamixStorage');
+import megamixStorage from '../models/megamixStorage.mjs';
+import megamixCreator from '../models/megamixCreator.mjs';
+
+const router = express.Router();
 
 router.post('/save_megamix', (req, res) => {
     const refreshToken = req.body.refresh_token;
@@ -17,9 +19,16 @@ router.post('/save_megamix', (req, res) => {
 });
 
 router.post('/get_megamixes', (req, res) => {
-    megamixStorage.getMegamixes();
+    megamixCreator.generateMegamixes();
+
+    res.sendStatus(200);
+});
+
+router.post("/clear", (req, res) => {
+    megamixStorage.clearMegamixes();
 
     res.sendStatus(200);
 })
 
-module.exports = router;
+
+export default router;

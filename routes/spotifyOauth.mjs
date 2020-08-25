@@ -1,8 +1,13 @@
-const express = require('express');
-const querystring = require('querystring');
-const request = require('request'); // "Request" library
+import express from 'express';
+import querystring from 'querystring';
+import request from 'request';
 
-const router = express.Router();
+// const express = require('express');
+// const querystring = require('querystring');
+// const request = require('request'); // "Request" library
+
+let router = express.Router();
+export default router 
 
 var client_id = '791fe36d332a46dfbc596adaf06d224f'; // Your client id
 var client_secret = 'a4fb8056d3b04b42aba8ec849fe413e5'; // Your secret
@@ -69,6 +74,11 @@ router.get('/callback', (req, res) => {
             if (!error && response.statusCode === 200) {
                 var access_token = body.access_token,
                     refresh_token = body.refresh_token;
+                    
+                console.log('access token');
+                console.log(access_token);
+                console.log('refresh token');
+                console.log(refresh_token);
         
                 // we can also pass the token to the browser to make requests from there
                 res.redirect('/#' +
@@ -91,7 +101,7 @@ router.get('/refresh_token', (req, res) => {
   var refresh_token = req.query.refresh_token;
   var authOptions = {
     url: 'https://accounts.spotify.com/api/token',
-    headers: { 'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')) },
+    headers: { 'Authorization': 'Basic ' + getClientIDAndSecret() },
     form: {
       grant_type: 'refresh_token',
       refresh_token: refresh_token
@@ -109,4 +119,10 @@ router.get('/refresh_token', (req, res) => {
   });
 });
 
-module.exports = router;
+export const getClientIDAndSecret = () => {
+  return new Buffer(client_id + ":" + client_secret).toString('base64');
+}
+
+export const getClientID = () => {
+  return client_id;
+}

@@ -1,6 +1,6 @@
 import config from '../config.js';
 import generateImage from './imageGen.js';
-import spotifyApi from '../spotifyApi.js';
+import spotifyApi from '../frontendSpotifyApi.js';
 
 let playlistInfo = [];
 
