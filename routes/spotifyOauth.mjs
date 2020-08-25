@@ -1,17 +1,16 @@
 import express from 'express';
 import querystring from 'querystring';
 import request from 'request';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 // const express = require('express');
 // const querystring = require('querystring');
 // const request = require('request'); // "Request" library
 
 let router = express.Router();
-export default router 
-
-var client_id = '791fe36d332a46dfbc596adaf06d224f'; // Your client id
-var client_secret = 'a4fb8056d3b04b42aba8ec849fe413e5'; // Your secret
-var redirect_uri = 'http://localhost:8080/auth/callback'; // Your redirect uri
+export default router;
 
 var stateKey = 'spotify_auth_state';
 
@@ -24,9 +23,9 @@ router.get('/login', (req, res) => {
     res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
         response_type: 'code',
-        client_id: client_id,
+        client_id: process.env.CLIENT_ID,
         scope: scope,
-        redirect_uri: redirect_uri,
+        redirect_uri: process.env.REDIRECT_URI,
         state: state
     }));
 });
@@ -61,11 +60,11 @@ router.get('/callback', (req, res) => {
             url: 'https://accounts.spotify.com/api/token',
             form: {
                 code: code,
-                redirect_uri: redirect_uri,
+                redirect_uri: process.env.REDIRECT_URI,
                 grant_type: 'authorization_code'
             },
             headers: {
-                'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+                'Authorization': 'Basic ' + (new Buffer(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET).toString('base64'))
             },
             json: true
         };
@@ -101,7 +100,7 @@ router.get('/refresh_token', (req, res) => {
   var refresh_token = req.query.refresh_token;
   var authOptions = {
     url: 'https://accounts.spotify.com/api/token',
-    headers: { 'Authorization': 'Basic ' + getClientIDAndSecret() },
+    headers: { 'Authorization': 'Basic ' + new Buffer(process.env.CLIENT_ID + ":" + process.env.CLIENT_SECRET).toString('base64') },
     form: {
       grant_type: 'refresh_token',
       refresh_token: refresh_token
@@ -118,11 +117,3 @@ router.get('/refresh_token', (req, res) => {
     }
   });
 });
-
-export const getClientIDAndSecret = () => {
-  return new Buffer(client_id + ":" + client_secret).toString('base64');
-}
-
-export const getClientID = () => {
-  return client_id;
-}

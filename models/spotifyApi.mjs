@@ -1,6 +1,7 @@
 import fetch from 'node-fetch';
+import dotenv from 'dotenv';
 
-import { getClientIDAndSecret, getClientID } from '../routes/spotifyOauth.mjs';
+dotenv.config();
 
 const spotifyApiUrl = "https://api.spotify.com/";
 
@@ -62,12 +63,12 @@ export default class SpotifyApi {
     async refreshAccessToken() {
         // const url = `${spotifyApiUrl}/auth/refresh_token?refresh_token=${this._refreshToken}`;
         const url = `https://accounts.spotify.com/api/token`;
-        const idAndSecret = getClientIDAndSecret();
+        const idAndSecret = new Buffer(process.env.CLIENT_ID + ":" + process.env.CLIENT_SECRET).toString('base64');
         
         const urlSearchParams = new URLSearchParams();
         urlSearchParams.append('grant_type', 'refresh_token');
         urlSearchParams.append('refresh_token', this.refreshToken);
-        urlSearchParams.append('client_id', getClientID());
+        urlSearchParams.append('client_id', process.env.CLIENT_ID);
 
         const response = await fetch(url, {
             method: 'POST',
