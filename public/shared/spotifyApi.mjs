@@ -13,7 +13,6 @@ function SpotifyApi(getAccessTokenFunc, getRefreshTokenFunc, setAccessTokenFunc)
 
     async function getPlaylistsRecursive(url) {
         const playlistInfo = await makeApiRequestAndProcessJson(url);
-        console.log(playlistInfo);
 
         if (playlistInfo.items.length === playlistInfo.limit) {
             const newPlaylistInfo = getPlaylistsRecursive(playlistInfo.next);
