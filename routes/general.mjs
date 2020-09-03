@@ -1,23 +1,23 @@
-import express from 'express';
-import path from 'path';
-import process from 'process';
+import express from "express";
+import path from "path";
+import process from "process";
 
 // const express = require('express');
 // const path = require('path');
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-    res.sendFile(path.join(process.cwd(), "views/index.html"));
-});
+// router.get("/", (req, res) => {
+// 	res.sendFile(path.join(process.cwd(), "views/index.html"));
+// });
 
 router.get("/feature/collage", (req, res) => {
-    res.sendFile(path.join(process.cwd(), "views/collage.html"));
+	res.sendFile(path.join(process.cwd(), "views/collage.html"));
 });
 
 router.get("/feature/*", (req, res) => {
-    console.log(req.originalUrl);
-    res.send("Not yet implemented");
+	console.log(req.originalUrl);
+	res.send("Not yet implemented");
 });
 
 // router.get("/shared/*", (req, res) => {
@@ -28,9 +28,9 @@ router.get("/feature/*", (req, res) => {
 // });
 
 router.get("*", (req, res) => {
-    let url = req.originalUrl.slice(1);
-    if (url === "") url = "index.html";
-    res.sendFile(path.join(process.cwd(), "public", url));
+	let url = req.originalUrl.slice(1);
+	if (url === "") url = "dist/index.html";
+	res.sendFile(path.join(process.cwd(), "frontend", url));
 });
 
 export default router;
