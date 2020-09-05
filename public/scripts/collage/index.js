@@ -1,5 +1,6 @@
 import config from '../config.js';
 import generateImage from './imageGen.js';
+import spotifyApi from '../frontendSpotifyApi.js';
 
 let playlistInfo = [];
 
@@ -24,21 +25,22 @@ async function getPlaylists(next) {
     playlistInfo = playlistInfo.concat(json.items);
 }
 
-async function getImages(href, size) {
-    const token = localStorage.getItem('access_token');
-    const data = {
-        headers: {
-            Authorization: 'Bearer ' + token
-        }
-    };
+// async function getCoverArt(playlistUrl, size) {
+//     // const token = localStorage.getItem('access_token');
+//     // const data = {
+//     //     headers: {
+//     //         Authorization: 'Bearer ' + token
+//     //     }
+//     // };
 
-    const url = href + '/tracks';
+//     // const url = href + '/tracks';
 
-    const response = await fetch(url, data);
-    const songs = await response.json();
-    const images = songs.items.map((song) => song.track.album.images[size]);
-    return images;
-}
+//     // const response = await fetch(url, data);
+//     // const songs = await response.json();
+//     const coverArtAllSizes = await spotifyApi.getPlaylistCoverArt(playlistUrl);
+//     const coverArt = coverArtAllSizes.items.map((song) => song.track.album.images[size]);
+//     return coverArt;
+// }
 
 function getSize(sizeWord) {
     switch(sizeWord) {
@@ -82,7 +84,7 @@ async function formHandler (event) {
 
     // Get image data
     const playlist = playlistInfo.filter((playlist) => playlist.name === formData.playlist)[0];
-    let images = await getImages(playlist.href, getSize(formData.size));
+    let images = await spotifyApi.getPlaylistCoverArt(playlist, getSize(formData.size));
 
     // Remove repeated images
     if (formData.repeats) {
@@ -102,7 +104,6 @@ async function formHandler (event) {
     // Remove excess images
     let numberOfImages = formData.width * formData.height;
     images.splice(numberOfImages);
-    console.log(images);
 
     // Generate image
     const collage = await generateImage(images, formData.width, formData.height, formData['bigger-boxes']);
