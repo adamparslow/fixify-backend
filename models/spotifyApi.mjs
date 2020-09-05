@@ -25,7 +25,10 @@ export default class SpotifyApi {
 	}
 
 	async getPlaylistsRecursive(url) {
-		const playlistInfo = await this.makeApiRequestAndProcessJson("GET", url);
+		const playlistInfo = await this.makeApiRequestAndProcessJson(
+			"GET",
+			url
+		);
 
 		if (playlistInfo.items.length === playlistInfo.limit) {
 			const newPlaylistInfo = await this.getPlaylistsRecursive(
@@ -47,22 +50,24 @@ export default class SpotifyApi {
 
 	// Public
 	async getPlaylistTracks(playlist) {
-        const url = playlist.href + '/tracks';
+		const url = playlist.href + "/tracks";
 
-        return await this.getPlaylistTracksRecursive(url);
-    }
-    
-    async getPlaylistTracksRecursive(url) {
-        const tracks = await this.makeApiRequestAndProcessJson("GET", url);
-        const trackItems = tracks.items;
+		return await this.getPlaylistTracksRecursive(url);
+	}
 
-        if (tracks.next) {
-            const newTrackItems = await this.getPlaylistTracksRecursive(tracks.next);
-            trackItems.push(...newTrackItems);
-        }
+	async getPlaylistTracksRecursive(url) {
+		const tracks = await this.makeApiRequestAndProcessJson("GET", url);
+		const trackItems = tracks.items;
+
+		if (tracks.next) {
+			const newTrackItems = await this.getPlaylistTracksRecursive(
+				tracks.next
+			);
+			trackItems.push(...newTrackItems);
+		}
 
 		return trackItems;
-    }
+	}
 
 	// Public
 	async createPlaylist(userID, playlistName, description) {
@@ -88,7 +93,7 @@ export default class SpotifyApi {
 			};
 
 			const response = await this.makeApiRequestAndProcessJson(
-                "POST",
+				"POST",
 				url,
 				body
 			);
@@ -102,9 +107,7 @@ export default class SpotifyApi {
 		const url =
 			process.env.SPOTIFY_API_URI + `playlists/${playlist.id}/tracks`;
 
-        console.log(uris.length);
 		for (let sent = 0; sent <= uris.length; sent += 100) {
-            console.log("Im running");
 			const body = {
 				uris: uris.slice(0 + sent, 100 + sent),
 			};
@@ -113,33 +116,13 @@ export default class SpotifyApi {
 		}
 	}
 
-	// async makeApiGetRequestAndProcessJson(url) {
-	// 	const response = await this.makeApiGetRequest(url);
-	// 	return await response.json();
-	// }
+	// Public
+	async getMyUserID() {
+		const url = process.env.SPOTIFY_API_URI + "me";
 
-	// async makeApiGetRequest(url) {
-	// 	let response = await fetch(url, this.getHeaders());
-	// 	if (response.status == 401) {
-	// 		await this.refreshAccessToken();
-	// 		response = await fetch(url, this.getHeaders());
-	// 	}
-	// 	return response;
-	// }
-
-	// async makeApiPostRequestAndProcessJson(url, body) {
-	// 	const response = await this.makeApiPostRequest(url, body);
-	// 	return await response.json();
-	// }
-
-	// async makeApiPostRequest(url, body) {
-	// 	let response = await fetch(url, this.getHeaders(body));
-	// 	if (response.status == 401) {
-	// 		await this.refreshAccessToken();
-	// 		let response = await fetch(url, this.getHeaders(body, "POST"));
-	// 	}
-	// 	return response;
-	// }
+		const response = await this.makeApiRequestAndProcessJson("GET", url);
+		return response;
+	}
 
 	async makeApiRequestAndProcessJson(method, url, body) {
 		const response = await this.makeApiRequest(method, url, body);
@@ -148,7 +131,7 @@ export default class SpotifyApi {
 
 	async makeApiRequest(method, url, body) {
 		let response = await fetch(url, this.getHeaders(body, method));
-		if (response.status == 401) {
+		if (response.status == 401 || response.status == 400) {
 			await this.refreshAccessToken();
 			return await fetch(url, this.getHeaders(body, method));
 		}
@@ -182,17 +165,17 @@ export default class SpotifyApi {
 	}
 
 	getHeaders(body, method) {
-        const header = {
-            method: method,
+		const header = {
+			method: method,
 			headers: {
 				Authorization: "Bearer " + this.accessToken,
-                "Content-Type": "application/json",
-			}
-        }
-        
-        if (method === "POST" || method === "DELETE") {
-            header.body = JSON.stringify(body);
-        }
+				"Content-Type": "application/json",
+			},
+		};
+
+		if (method === "POST" || method === "DELETE") {
+			header.body = JSON.stringify(body);
+		}
 
 		return header;
 	}

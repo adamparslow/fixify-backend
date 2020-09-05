@@ -3,12 +3,10 @@
 </template>
 
 <script>
-import tokenHandler from "../model/tokenHandler.js";
+import tokenHandler from "@/model/tokenHandler.js";
 
 export default {
     created: function () {
-        console.log("welcome to the end game");
-        console.log(this.$route.params);
         const queryString = this.$route.params.query;
 
         const [accessToken, refreshToken] = queryString

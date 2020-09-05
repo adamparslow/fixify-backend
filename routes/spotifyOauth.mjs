@@ -20,7 +20,7 @@ router.get("/login", (req, res) => {
 
 	// your application requests authorization
 	var scope =
-		"playlist-read-collaborative playlist-read-private playlist-modify-public";
+		"playlist-read-collaborative playlist-read-private playlist-modify-public user-read-private";
 	res.redirect(
 		"https://accounts.spotify.com/authorize?" +
 			querystring.stringify({
