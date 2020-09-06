@@ -75,7 +75,7 @@ export default class SpotifyApi {
 
 		const body = {
 			name: playlistName,
-			description: description ?? "",
+			description: description ? description : "",
 		};
 
 		return await this.makeApiRequestAndProcessJson("POST", url, body);
