@@ -1,6 +1,6 @@
 import fs from "fs";
 import sqlite3 from "sqlite3";
-import { open } from "sqlite";
+import sqlite from "sqlite";
 
 // const fs = require('fs');
 // const sqlite3 = require('sqlite3').verbose();
@@ -22,17 +22,16 @@ function databaseExists() {
 	return fs.existsSync(databaseFileLocation);
 }
 
-function createMegamixTable() {
-	database.serialize(() => {
-		database.run(
-			"CREATE TABLE Megamix (userId TEXT PRIMARY KEY, refreshToken TEXT)"
-		);
-	});
+async function createMegamixTable() {
+	const database = await openDatabase();
+	database.exec(
+		"CREATE TABLE Megamix (userId TEXT PRIMARY KEY, refreshToken TEXT)"
+	);
 	console.log("Table created");
 }
 
 async function openDatabase() {
-	return await open({
+	return await sqlite.open({
 		filename: "./.data/sqlite.db",
 		driver: sqlite3.Database,
 	});
