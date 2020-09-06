@@ -31,7 +31,10 @@ async function createMegamixTable() {
 }
 
 async function openDatabase() {
-	fs.writeFile("./.data/sqlite.db");
+	if (!databaseExists()) {
+		fs.writeFile("./.data/sqlite.db");
+	}
+
 	return await sqlite.open({
 		filename: "./.data/sqlite.db",
 		driver: sqlite3.Database,
