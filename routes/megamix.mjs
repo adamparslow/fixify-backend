@@ -36,7 +36,7 @@ router.get("/register", async (req, res) => {
 	const spotifyApi = new SpotifyApi("", refreshToken);
 	const user = await spotifyApi.getMyUserID();
 
-	const isRegistered = await megamixStorage.isRegistered(user.id);
+	const isRegistered = megamixStorage.isRegistered(user.id);
 
 	res.send(isRegistered);
 });
@@ -47,7 +47,7 @@ router.post("/register", async (req, res) => {
 	const spotifyApi = new SpotifyApi("", refreshToken);
 	const user = await spotifyApi.getMyUserID();
 
-	await megamixStorage.registerUser(refreshToken, user.id);
+	megamixStorage.registerUser(refreshToken, user.id);
 
 	res.sendStatus(200);
 });
@@ -58,7 +58,7 @@ router.delete("/register", async (req, res) => {
 	const spotifyApi = new SpotifyApi("", refreshToken);
 	const user = await spotifyApi.getMyUserID();
 
-	await megamixStorage.deregisterUser(user.id);
+	megamixStorage.deregisterUser(user.id);
 
 	res.sendStatus(200);
 });
