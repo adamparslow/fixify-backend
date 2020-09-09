@@ -27,7 +27,12 @@ function createMegamixTable() {
 
 function openDatabase() {
 	if (!databaseExists()) {
-		fs.writeFile("./.data/sqlite.db", "", () => {});
+		if (!fs.existsSync(".data")) {
+			fs.mkdir(".data", () => {});
+		}
+
+		const cs = fs.createWriteStream(".data/sqlite.db");
+		cs.end();
 	}
 
 	return new Database("./.data/sqlite.db");
