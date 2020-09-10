@@ -1,14 +1,14 @@
 import tokenHandler from "./tokenHandler.js";
 
 const getMegamixRegistrationStatus = async () => {
-	const url = `http://localhost:8080/megamix/register?refresh_token=${tokenHandler.getRefreshToken()}`;
+	const url = `/megamix/register?refresh_token=${tokenHandler.getRefreshToken()}`;
 
 	const response = await fetch(url);
 	return await response.json();
 };
 
 const registerForMegamix = async () => {
-	const url = "http://localhost:8080/megamix/register";
+	const url = constants.website + "/megamix/register";
 	const refreshToken = tokenHandler.getRefreshToken();
 	const body = {
 		refresh_token: refreshToken,
@@ -24,7 +24,7 @@ const registerForMegamix = async () => {
 };
 
 const deregisterFromMegamix = async () => {
-	const url = "http://localhost:8080/megamix/register";
+	const url = "/megamix/register";
 	const refreshToken = tokenHandler.getRefreshToken();
 	const body = {
 		refresh_token: refreshToken,
@@ -40,7 +40,7 @@ const deregisterFromMegamix = async () => {
 };
 
 const createMegamix = async () => {
-	const url = "http://localhost:8080/megamix/generate";
+	const url = "/megamix/generate";
 	const refreshToken = tokenHandler.getRefreshToken();
 	const body = {
 		refresh_token: refreshToken,
