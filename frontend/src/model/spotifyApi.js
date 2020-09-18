@@ -8,7 +8,7 @@ const getMegamixRegistrationStatus = async () => {
 };
 
 const registerForMegamix = async () => {
-	const url = constants.website + "/megamix/register";
+	const url = "/megamix/register";
 	const refreshToken = tokenHandler.getRefreshToken();
 	const body = {
 		refresh_token: refreshToken,
