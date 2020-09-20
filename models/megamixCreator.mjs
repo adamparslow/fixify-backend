@@ -7,11 +7,11 @@ const description = "Combined daily mix - created by Fixify";
 const generateMegamixes = async () => {
 	const records = await megamixStorage.getMegamixes();
 	for (const record of records) {
-		generateMegamixFromRefreshToken(record.refreshToken);
+		generateMegamixFromRefreshToken(record.refreshToken, record.userId);
 	}
 };
 
-const generateMegamixFromRefreshToken = async (refreshToken) => {
+const generateMegamixFromRefreshToken = async (refreshToken, userId) => {
 	let accessToken = 0;
 
 	console.log(refreshToken);
@@ -43,11 +43,7 @@ const generateMegamixFromRefreshToken = async (refreshToken) => {
 		await spotifyApi.removeTracksFromPlaylist(megamix, megamixUris);
 	} else {
 		console.log("Getting new megamix");
-		megamix = await spotifyApi.createPlaylist(
-			record.userId,
-			name,
-			description
-		);
+		megamix = await spotifyApi.createPlaylist(userId, name, description);
 	}
 
 	// console.log("Megamix");
