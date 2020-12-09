@@ -36,4 +36,7 @@ export default {
 </script>
 
 <style scoped>
+router-link span {
+    background: red;
+}
 </style>

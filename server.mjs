@@ -1,13 +1,14 @@
-import express from 'express';
-import cors from 'cors';
-import cookieParser from 'cookie-parser';
+import express from "express";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 
-import generalRoutes from './routes/general.mjs';
-import authRoutes from './routes/spotifyOauth.mjs';
-import megamixRoutes from './routes/megamix.mjs';
+import generalRoutes from "./routes/general.mjs";
+import authRoutes from "./routes/spotifyOauth.mjs";
+import megamixRoutes from "./routes/megamix.mjs";
+import spotifyRoutes from "./routes/spotifyApi.mjs";
 
-import megamixStorage from './models/megamixStorage.mjs';
-import scheduler from './models/scheduler.mjs';
+import megamixStorage from "./models/megamixStorage.mjs";
+import scheduler from "./models/scheduler.mjs";
 
 // const express = require('express');
 // const cors = require('cors');
@@ -23,14 +24,15 @@ const port = process.env.PORT || 8080;
 megamixStorage.init();
 scheduler.scheduleMegamixes();
 
-app.use(express.static('client/build'))
-    .use(express.json())
-    .use(cors())
-    .use(cookieParser())
-    .use('/auth', authRoutes)
-    .use('/megamix', megamixRoutes)
-    .use('/', generalRoutes);
+app.use(express.static("client/build"))
+	.use(express.json())
+	.use(cors())
+	.use(cookieParser())
+	.use("/auth", authRoutes)
+	.use("/megamix", megamixRoutes)
+	.use("/spotify", spotifyRoutes)
+	.use("/", generalRoutes);
 
 app.listen(port, () => {
-    console.log(`Listening on port ${port}...`);
-})
+	console.log(`Listening on port ${port}...`);
+});

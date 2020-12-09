@@ -31,5 +31,5 @@
     "url": "https://github.com/adamparslow/Fixify/issues"
   },
   "homepage": "https://github.com/adamparslow/Fixify#readme",
-  "type": "modules"
+  "type": "module"
 }

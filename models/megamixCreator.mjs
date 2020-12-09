@@ -7,11 +7,11 @@ const description = "Combined daily mix - created by Fixify";
 const generateMegamixes = async () => {
 	const records = await megamixStorage.getMegamixes();
 	for (const record of records) {
-		generateMegamixFromRefreshToken(record.refreshToken);
+		generateMegamixFromRefreshToken(record.refreshToken, record.userId);
 	}
 };
 
-const generateMegamixFromRefreshToken = async (refreshToken) => {
+const generateMegamixFromRefreshToken = async (refreshToken, userId) => {
 	let accessToken = 0;
 
 	console.log(refreshToken);
@@ -28,8 +28,10 @@ const generateMegamixFromRefreshToken = async (refreshToken) => {
 	// Get all tracks of daily mixes
 	const allTrackURIs = [];
 	for (const mix of dailyMixes) {
-		const tracks = await spotifyApi.getPlaylistTracks(mix);
-		const uris = tracks.map((track) => track.track.uri);
+		const tracks = await spotifyApi.getPlaylistTracks(mix.href);
+		const uris = tracks
+      .filter((track) => track.track !== null)
+      .map((track) => track.track.uri);
 
 		allTrackURIs.push(...uris);
 	}
@@ -37,17 +39,13 @@ const generateMegamixFromRefreshToken = async (refreshToken) => {
 	// Create new playlist
 	let megamix = playlists.filter((playlist) => playlist.name == "Megamix")[0];
 	if (megamix) {
-		const megamixTracks = await spotifyApi.getPlaylistTracks(megamix);
+		const megamixTracks = await spotifyApi.getPlaylistTracks(megamix.href);
 		const megamixUris = megamixTracks.map((track) => track.track.uri);
 
 		await spotifyApi.removeTracksFromPlaylist(megamix, megamixUris);
 	} else {
 		console.log("Getting new megamix");
-		megamix = await spotifyApi.createPlaylist(
-			record.userId,
-			name,
-			description
-		);
+		megamix = await spotifyApi.createPlaylist(userId, name, description);
 	}
 
 	// console.log("Megamix");

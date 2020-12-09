@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import spotifyApi from "@/model/spotifyApi.js";
+import megamixService from "@/model/megamixService.js";
 
 export default {
     data: function () {
@@ -21,18 +21,18 @@ export default {
         };
     },
     created: async function () {
-        this.registered = await spotifyApi.getMegamixRegistrationStatus();
+        this.registered = await megamixService.getMegamixRegistrationStatus();
     },
     methods: {
         toggleRegister: function () {
             console.log("does this come up");
             this.registered = !this.registered;
             this.registered
-                ? spotifyApi.registerForMegamix()
-                : spotifyApi.deregisterFromMegamix();
+                ? megamixService.registerForMegamix()
+                : megamixService.deregisterFromMegamix();
         },
         createMegamix: function () {
-            spotifyApi.createMegamix();
+            megamixService.createMegamix();
         },
     },
     computed: {

@@ -63,10 +63,13 @@ router.delete("/register", async (req, res) => {
 	res.sendStatus(200);
 });
 
-router.post("/generate", (req, res) => {
+router.post("/generate", async (req, res) => {
 	const refreshToken = req.body.refresh_token;
 
-	megamixCreator.generateMegamixFromRefreshToken(refreshToken);
+	const spotifyApi = new SpotifyApi("", refreshToken);
+	const user = await spotifyApi.getMyUserID();
+
+	megamixCreator.generateMegamixFromRefreshToken(refreshToken, user.id);
 
 	res.sendStatus(200);
 });

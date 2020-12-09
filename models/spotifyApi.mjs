@@ -41,16 +41,16 @@ export default class SpotifyApi {
 	}
 
 	// Public
-	async getPlaylistCoverArt(playlist, size) {
-		const tracks = getPlaylistTracks(playlist);
+	async getPlaylistCoverArt(playlistHref, size) {
+		const tracks = await this.getPlaylistTracks(playlistHref);
 
 		const coverArt = tracks.map((song) => song.track.album.images[size]);
 		return coverArt;
 	}
 
 	// Public
-	async getPlaylistTracks(playlist) {
-		const url = playlist.href + "/tracks";
+	async getPlaylistTracks(playlistHref) {
+		const url = playlistHref + "/tracks";
 
 		return await this.getPlaylistTracksRecursive(url);
 	}
@@ -130,6 +130,7 @@ export default class SpotifyApi {
 	}
 
 	async makeApiRequest(method, url, body) {
+    console.log(url);
 		let response = await fetch(url, this.getHeaders(body, method));
 		if (response.status == 401 || response.status == 400) {
 			await this.refreshAccessToken();
