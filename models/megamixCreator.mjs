@@ -28,8 +28,10 @@ const generateMegamixFromRefreshToken = async (refreshToken, userId) => {
 	// Get all tracks of daily mixes
 	const allTrackURIs = [];
 	for (const mix of dailyMixes) {
-		const tracks = await spotifyApi.getPlaylistTracks(mix);
-		const uris = tracks.map((track) => track.track.uri);
+		const tracks = await spotifyApi.getPlaylistTracks(mix.href);
+		const uris = tracks
+      .filter((track) => track.track !== null)
+      .map((track) => track.track.uri);
 
 		allTrackURIs.push(...uris);
 	}
@@ -37,7 +39,7 @@ const generateMegamixFromRefreshToken = async (refreshToken, userId) => {
 	// Create new playlist
 	let megamix = playlists.filter((playlist) => playlist.name == "Megamix")[0];
 	if (megamix) {
-		const megamixTracks = await spotifyApi.getPlaylistTracks(megamix);
+		const megamixTracks = await spotifyApi.getPlaylistTracks(megamix.href);
 		const megamixUris = megamixTracks.map((track) => track.track.uri);
 
 		await spotifyApi.removeTracksFromPlaylist(megamix, megamixUris);

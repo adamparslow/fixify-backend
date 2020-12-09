@@ -2,8 +2,8 @@ import schedule from "node-schedule";
 
 import megamixCreator from "./megamixCreator.mjs";
 
-const megamixSchedule = "0 3 * * *";
-// const megamixSchedule = "* * * * * *";
+const megamixSchedule = "0 19 * * *";
+// const megamixSchedule = "* * * * *";
 
 export default {
 	scheduleMegamixes: () => {
