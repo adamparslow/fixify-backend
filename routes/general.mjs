@@ -30,7 +30,8 @@ router.get("/feature/*", (req, res) => {
 router.get("*", (req, res) => {
 	let url = req.originalUrl.slice(1);
 	if (url === "") url = "index.html";
-	res.sendFile(path.join(process.cwd(), "frontend/dist", url));
+	const localFolder = process.cwd().indexOf("aztar") != -1 ? "frontend/dist" : "frontend";
+	res.sendFile(path.join(process.cwd(), localFolder, url));
 });
 
 export default router;

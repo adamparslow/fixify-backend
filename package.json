@@ -19,7 +19,8 @@
   "devDependencies": {},
   "scripts": {
     "test": "nodemon --experimental-modules server.mjs",
-    "start": "node --experimental-modules server.mjs"
+    "start": "node --experimental-modules server.mjs",
+    "deploy": "npx glitcheroo deploy"
   },
   "repository": {
     "type": "git",
