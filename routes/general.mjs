@@ -29,8 +29,9 @@ router.get("/feature/*", (req, res) => {
 
 router.get("*", (req, res) => {
 	let url = req.originalUrl.slice(1);
-	if (url === "") url = "dist/index.html";
-	res.sendFile(path.join(process.cwd(), "frontend", url));
+	console.log(url);
+	if (url === "") url = "index.html";
+	res.sendFile(path.join(process.cwd(), "frontend/dist", url));
 });
 
 export default router;
