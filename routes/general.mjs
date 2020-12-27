@@ -15,9 +15,11 @@ router.get("/feature/*", (req, res) => {
 
 router.get("*", (req, res) => {
 	let url = req.originalUrl.slice(1);
-	if (url === "") url = "index.html";
+	const isLocal = process.cwd().indexOf("aztar") == -1;	
+
+	if (url === "") url = isLocal ? "index.html" : "dist/frontend";
 	// To fix an issue between local and glitch
-	const localFolder = process.cwd().indexOf("aztar") != -1 ? "frontend/dist" : "frontend";
+	const localFolder =  isLocal ? "frontend/dist" : "frontend";
 	res.sendFile(path.join(process.cwd(), localFolder, url));
 });
 
