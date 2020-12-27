@@ -1,9 +1,13 @@
 <template>
-    <div>
-        <h1>Features</h1>
-        <div v-for="feature in features" :key="feature.id">
-            <router-link :to="feature.route">{{feature.name}}</router-link>
-        </div>
+    <div class="container">
+        <header class="header-bar">
+            <h1>Fixify</h1>
+        </header>
+        <article class="routes-container">
+            <div v-for="feature in features" :key="feature.id" class="route-box">
+                <router-link :to="feature.route" class="router-link">{{feature.name}}</router-link>
+            </div>
+        </article>
     </div>
 </template>
 
@@ -36,7 +40,45 @@ export default {
 </script>
 
 <style scoped>
-router-link span {
-    background: red;
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.header-bar {
+    display: flex;
+    justify-content: center;
+    background: #33ccff;
+    padding: 40px;
+}
+
+.routes-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 40px;
+}
+
+.route-box {
+    display: flex;
+}
+
+.router-link {
+    background: #33ccff;;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 40px;
+    text-decoration: none;
+    color: black;
+}
+
+.router-link:hover {
+    background: rgba(51, 204, 255, 0.2);
+}
+
+.router-link a:active {
+    text-decoration: none;
 }
 </style>
