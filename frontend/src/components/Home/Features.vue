@@ -25,14 +25,12 @@ export default {
                     id: 1,
                     name: "Collage",
                     route: "/collage",
-                    colour: "rgba(255, 153, 0, 0.5)",
                     imageClass: "collage-image"
                 },
                 {
                     id: 2,
                     name: "Megamix",
                     route: "/megamix",
-                    // colour: "#66cc66"
                     imageClass: "megamix-image"
                 },
                 {
@@ -86,9 +84,11 @@ export default {
 .header-bar {
     display: flex;
     justify-content: center;
+}
+
+.header-bar h1 {
     color: #33ccff;
-    
-    font-size: 40px;
+    font-size: 80px;
 }
 
 .routes-container {
@@ -99,27 +99,16 @@ export default {
 }
 
 .image {
-    position: relative;
-}
-
-.image::before {
     background-size: cover;
     background-repeat: no-repeat;
-    z-index: -1;
-    
-    content: "";
-    position:absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    background-position: top;
 }
 
-.collage-image::before {
+.collage-image {
     background-image: url('../../assets/collage.png');
 }
 
-.megamix-image::before {
+.megamix-image {
     background-image: url('../../assets/megamix.png');
 }
 
@@ -130,11 +119,11 @@ export default {
 .router-link {
     text-decoration: none;
     color: white;
-    height: 170px;
+    height: 46vw;
     
     display: flex;
     align-items:flex-end;
-    justify-content: start;
+    justify-content: flex-start;
     
     font-size: 50px;
 }
@@ -143,7 +132,7 @@ export default {
     opacity: 100%;
 }
 
-.router-link:hover {
+.router-link:hover, .router-link:active {
     opacity: 20%;
 }
 
