@@ -81,16 +81,6 @@ export default {
     height: 100vh;
 }
 
-.header-bar {
-    display: flex;
-    justify-content: center;
-}
-
-.header-bar h1 {
-    color: #33ccff;
-    font-size: 80px;
-}
-
 .routes-container {
     flex: 1;
     display: flex;
@@ -126,10 +116,6 @@ export default {
     justify-content: flex-start;
     
     font-size: 50px;
-}
-
-.router-link span {
-    opacity: 100%;
 }
 
 .router-link:hover, .router-link:active {

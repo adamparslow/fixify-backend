@@ -22,4 +22,14 @@ body {
 
     font-family: Gotham;
 }
+
+.header-bar {
+    display: flex;
+    justify-content: center;
+}
+
+.header-bar h1 {
+    color: #33ccff;
+    font-size: 80px;
+}
 </style>
