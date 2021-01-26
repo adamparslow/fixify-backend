@@ -5,17 +5,18 @@
         </header>
         <article>
             <p>Please log into your spotify to gain access to Fixify</p>
-            <a href="/auth/login">Log In</a>
+            <a href="/auth/login" class="rounded-button">Log In</a>
         </article>
     </div>
 </template>
 
 <style scoped>
 a {
-    background: #33ccff;
-    padding: 10px;
-    border-radius: 20px;
-    text-decoration: none;
-    color: black;
+}
+
+article {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 </style>

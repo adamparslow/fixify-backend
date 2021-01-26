@@ -32,4 +32,13 @@ body {
     color: #33ccff;
     font-size: 80px;
 }
+
+.rounded-button {
+    background: #33ccff;
+    padding: 10px;
+    border-radius: 20px;
+    text-decoration: none;
+    color: black;
+}
+
 </style>

@@ -4,12 +4,9 @@
             <h1>Fixify</h1>
         </header>
         <article class="routes-container">
-            <div v-for="feature in features" :key="feature.id" style="background: white"
-                v-bind:style="{background:feature.colour}">
-                <router-link  :to="feature.route" class="router-link image" v-bind:class="feature.imageClass">
-                    <span>{{feature.name}}</span>
-                </router-link>
-            </div>
+            <router-link  v-for="feature in features" :key="feature.id" :to="feature.route" class="router-link image" v-bind:class="feature.imageClass">
+                <span>{{feature.name}}</span>
+            </router-link>
         </article>
     </div>
 </template>
@@ -37,31 +34,31 @@ export default {
                     id: 3,
                     name: "Artist Follower",
                     route: "/",
-                    colour: "#33ccff"
+                    imageClass: "blue-background"
                 },
                 {
                     id: 4,
                     name: "Album Liker",
                     route: "/",
-                    colour: "#ff9900"
+                    imageClass: "yellow-background"
                 },
                 {
                     id: 5,
                     name: "Playlist Correction",
                     route: "/",
-                    colour: "#66cc66"
+                    imageClass: "green-background"
                 },
                 {
                     id: 6,
                     name: "Song Correction",
                     route: "/",
-                    colour: "#33ccff"
+                    imageClass: "blue-background"
                 },
                 {
                     id: 7,
                     name: "Backup",
                     route: "/",
-                    colour: "#ff9900"
+                    imageClass: "yellow-background"
                 },
             ],
         };
@@ -79,6 +76,7 @@ export default {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    align-items: center;
 }
 
 .routes-container {
@@ -86,6 +84,7 @@ export default {
     display: flex;
     align-items: stretch;
     flex-direction: column;
+    width: 100%;
 }
 
 .image {
@@ -102,8 +101,16 @@ export default {
     background-image: url('../../assets/megamix.png');
 }
 
-.router-container {
-    margin-bottom: 1px;
+.blue-background {
+    background: #33ccff;
+}
+
+.yellow-background {
+    background: #ff9900;
+}
+
+.green-background {
+    background: #66cc66;
 }
 
 .router-link {
@@ -115,14 +122,48 @@ export default {
     align-items:flex-end;
     justify-content: flex-start;
     
-    font-size: 50px;
+    font-size: 10vw;
 }
+/* 
+.router-link:hover::before {
+    background: white;
+} */
 
 .router-link:hover, .router-link:active {
-    opacity: 20%;
+    opacity: 0.2;
 }
 
 .router-link a:active {
     text-decoration: none;
+}
+
+@media only screen and (min-width: 401px) and (max-width: 1200px) {
+    .routes-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-content: flex-start;
+    }    
+
+    .router-link {
+        width: 50%;
+        height: 23vw; /** half the mobile height */
+        
+        font-size: 5vw;
+    }    
+}
+
+@media only screen and (min-width: 1201px) {
+    .routes-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 1200px;
+    }
+    
+    .router-link {
+        height: 277px; /** 13:6 ratio, length of 1200px */
+        width: 600px;
+        
+        font-size: 60px;
+    }
 }
 </style>
