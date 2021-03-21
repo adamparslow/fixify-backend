@@ -33,14 +33,10 @@ export default class SpotifyApi {
 		let items = playlistInfo.items;
 
 		if (items.length === playlistInfo.limit) {
-			console.log("Does it recurse");
 			const newItems = await this.getPlaylistsRecursive(
 				playlistInfo.next
 			);
-			console.log(items.length);
-			console.log(newItems.length);
 			items = items.concat(newItems);
-			console.log(items.length);
 		}
 
 		return playlistInfo.items;
