@@ -69,7 +69,7 @@ router.post("/generate", async (req, res) => {
 	const spotifyApi = new SpotifyApi("", refreshToken);
 	const user = await spotifyApi.getMyUserID();
 
-	megamixCreator.generateMegamixFromRefreshToken(refreshToken, user.id);
+	await megamixCreator.generateMegamixFromRefreshToken(refreshToken, user.id);
 
 	res.sendStatus(200);
 });

@@ -39,7 +39,7 @@ export default class SpotifyApi {
 			items = items.concat(newItems);
 		}
 
-		return playlistInfo.items;
+		return items;
 	}
 
 	// Public
