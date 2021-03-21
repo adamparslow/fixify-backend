@@ -29,12 +29,18 @@ export default class SpotifyApi {
 			"GET",
 			url
 		);
+		
+		let items = playlistInfo.items;
 
-		if (playlistInfo.items.length === playlistInfo.limit) {
-			const newPlaylistInfo = await this.getPlaylistsRecursive(
+		if (items.length === playlistInfo.limit) {
+			console.log("Does it recurse");
+			const newItems = await this.getPlaylistsRecursive(
 				playlistInfo.next
 			);
-			playlistInfo.items.concat(newPlaylistInfo.items);
+			console.log(items.length);
+			console.log(newItems.length);
+			items = items.concat(newItems);
+			console.log(items.length);
 		}
 
 		return playlistInfo.items;
@@ -98,7 +104,8 @@ export default class SpotifyApi {
 				body
 			);
 			responses.push(response);
-		}
+		};
+		
 		return responses;
 	}
 
@@ -130,39 +137,14 @@ export default class SpotifyApi {
 	}
 
 	async makeApiRequest(method, url, body) {
-    console.log(url);
+		console.log(url);
+
 		let response = await fetch(url, this.getHeaders(body, method));
 		if (response.status == 401 || response.status == 400) {
 			await this.refreshAccessToken();
 			return await fetch(url, this.getHeaders(body, method));
 		}
 		return response;
-	}
-
-	async refreshAccessToken() {
-		// const url = `${spotifyApiUrl}/auth/refresh_token?refresh_token=${this._refreshToken}`;
-		const url = `https://accounts.spotify.com/api/token`;
-		const idAndSecret = new Buffer(
-			process.env.CLIENT_ID + ":" + process.env.CLIENT_SECRET
-		).toString("base64");
-
-		const urlSearchParams = new URLSearchParams();
-		urlSearchParams.append("grant_type", "refresh_token");
-		urlSearchParams.append("refresh_token", this.refreshToken);
-		urlSearchParams.append("client_id", process.env.CLIENT_ID);
-
-		const response = await fetch(url, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/x-www-form-urlencoded",
-				Authorization: "Basic " + idAndSecret,
-			},
-			body: urlSearchParams,
-		});
-
-		const json = await response.json();
-
-		this._accessToken = json.access_token;
 	}
 
 	getHeaders(body, method) {
@@ -180,4 +162,31 @@ export default class SpotifyApi {
 
 		return header;
 	}
+
+	async refreshAccessToken() {
+		// const url = `${spotifyApiUrl}/auth/refresh_token?refresh_token=${this._refreshToken}`;
+		const url = `https://accounts.spotify.com/api/token`;
+		const idAndSecret = new Buffer(
+			process.env.CLIENT_ID + ":" + process.env.CLIENT_SECRET
+		).toString("base64");
+
+		const urlSearchParams = new URLSearchParams();
+		urlSearchParams.append("grant_type", "refresh_token");
+		urlSearchParams.append("refresh_token", this.refreshToken);
+		// urlSearchParams.append("client_id", process.env.CLIENT_ID);
+
+		const response = await fetch(url, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/x-www-form-urlencoded",
+				Authorization: "Basic " + idAndSecret,
+			},
+			body: urlSearchParams,
+		});
+
+		const json = await response.json();
+
+		this._accessToken = json.access_token;
+	}
 }
+
