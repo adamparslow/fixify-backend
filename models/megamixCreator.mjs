@@ -48,6 +48,8 @@ const generateMegamixFromRefreshToken = async (refreshToken, userId) => {
 		megamix = await spotifyApi.createPlaylist(userId, name, description);
 	}
 
+	const megamixExternalUrl = megamix.external_urls.spotify;
+
 	// console.log("Megamix");
 	// console.log(megamix);
 
@@ -56,7 +58,8 @@ const generateMegamixFromRefreshToken = async (refreshToken, userId) => {
 		megamix,
 		allTrackURIs
 	);
-	// console.log(response);
+
+	return megamixExternalUrl;
 };
 
 export default {

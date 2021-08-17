@@ -11,9 +11,6 @@
 </template>
 
 <style scoped>
-a {
-}
-
 article {
     display: flex;
     flex-direction: column;
