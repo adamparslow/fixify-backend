@@ -127,6 +127,30 @@ export default class SpotifyApi {
 		return response;
 	}
 
+	// Public
+	async getLikedSongs() {
+		const url = process.env.SPOTIFY_API_URI + "me/tracks?limit=50";
+
+		const initialResponse = await this.makeApiRequestAndProcessJson("GET", url);
+		let tracks = initialResponse.items;
+		const totalTracks = initialResponse.total;
+		const promises = [];
+
+		for (let i = 50; i < totalTracks; i += 50) {
+			console.log(i);
+			promises.push(new Promise(async (resolve, reject) => {
+				const currUrl = url + "&offset=" + i;
+				const response = await this.makeApiRequestAndProcessJson("GET", currUrl);
+				tracks = tracks.concat(response.items);
+				resolve();
+			}));
+		}
+
+		Promise.all(promises);
+
+		return tracks;
+	}
+
 	async makeApiRequestAndProcessJson(method, url, body) {
 		const response = await this.makeApiRequest(method, url, body);
 		return await response.json();
