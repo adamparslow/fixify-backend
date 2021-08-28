@@ -51,6 +51,14 @@ export default class SpotifyApi {
 	}
 
 	// Public
+	async setPlaylistCoverArt(playlistHref, image) {
+		const url = playlistHref + "/images";
+		console.log(url);
+		const response = await this.makeApiRequest(url, () => this.getJPEGHeaders(image, "PUT"))
+		return response;
+	}
+
+	// Public
 	async getPlaylistTracks(playlistHref) {
 		const url = playlistHref + "/tracks";
 
@@ -152,17 +160,15 @@ export default class SpotifyApi {
 	}
 
 	async makeApiRequestAndProcessJson(method, url, body) {
-		const response = await this.makeApiRequest(method, url, body);
+		const response = await this.makeApiRequest(url, () => this.getHeaders(body, method));
 		return await response.json();
 	}
 
-	async makeApiRequest(method, url, body) {
-		console.log(url);
-
-		let response = await fetch(url, this.getHeaders(body, method));
+	async makeApiRequest(url, getData) {
+		let response = await fetch(url, getData());
 		if (response.status == 401 || response.status == 400) {
 			await this.refreshAccessToken();
-			return await fetch(url, this.getHeaders(body, method));
+			return await fetch(url, getData());
 		}
 		return response;
 	}
@@ -176,11 +182,17 @@ export default class SpotifyApi {
 			},
 		};
 
-		if (method === "POST" || method === "DELETE") {
+		if (method === "POST" || method === "DELETE" || method === "PUT") {
 			header.body = JSON.stringify(body);
 		}
 
 		return header;
+	}
+
+	getJPEGHeaders(body, method) {
+		const headers = this.getHeaders(body, method);
+		headers.headers["Content-Type"] = "image/jpeg"
+		return headers;
 	}
 
 	async refreshAccessToken() {
