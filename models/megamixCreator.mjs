@@ -97,20 +97,17 @@ async function addMegamixPlaylistImage(megamix, dailyMixes, spotifyApi) {
 	// Add overlay to the image
 	const overlay = await Jimp.read("assets/megamixThumbnail90.png");
 	image.composite(overlay, 0, 0)
-		.resize(150, 150);
-
-	await image.writeAsync("output3.jpeg");
-	const imageData = fs.readFileSync("output3.jpeg");
-	// console.log(imageData.toLocaleString());
+		.resize(512, 512);
 
 	// Set the image as the playlist image
-	// const imageJpeg = await image.(Jimp.MIME_JPEG);
-	// console.log(imageJpeg);
-	// console.log(megamix.href);
+	const imageJpeg = await image.getBase64Async(Jimp.MIME_JPEG);
 
-	// TODO: fix this up
-	// const response = await spotifyApi.setPlaylistCoverArt(megamix.href, imageData.toLocaleString())
-	// console.log(response);
+	const response = await spotifyApi.setPlaylistCoverArt(megamix.href, cleanBase64ForSpotify(imageJpeg));
+	console.log(response);
+}
+
+function cleanBase64ForSpotify(base64) {
+	return base64.split(",")[1];
 }
 
 export default {

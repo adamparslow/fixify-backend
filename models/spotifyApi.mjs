@@ -182,8 +182,10 @@ export default class SpotifyApi {
 			},
 		};
 
-		if (method === "POST" || method === "DELETE" || method === "PUT") {
+		if (method === "POST" || method === "DELETE") {
 			header.body = JSON.stringify(body);
+		} else if (method === "PUT") {
+			header.body = body;
 		}
 
 		return header;
