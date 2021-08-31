@@ -3,6 +3,7 @@
         <header class="header-bar">
             <h1>Fixify</h1>
         </header>
+        <button class="rounded-button" v-on:click="logOut">Log Out</button> 
         <article class="routes-container">
             <router-link  v-for="feature in features" :key="feature.id" :to="feature.route" class="router-link image" v-bind:class="feature.imageClass">
                 <span>{{feature.name}}</span>
@@ -32,36 +33,49 @@ export default {
                 },
                 {
                     id: 3,
+                    name: "Search",
+                    route: "/",
+                    imageClass: "green-background"
+                },
+                {
+                    id: 4,
                     name: "Artist Follower",
                     route: "/",
                     imageClass: "blue-background"
                 },
                 {
-                    id: 4,
+                    id: 5,
                     name: "Album Liker",
                     route: "/",
                     imageClass: "yellow-background"
                 },
                 {
-                    id: 5,
+                    id: 6,
                     name: "Playlist Correction",
                     route: "/",
                     imageClass: "green-background"
                 },
                 {
-                    id: 6,
+                    id: 7,
                     name: "Song Correction",
                     route: "/",
                     imageClass: "blue-background"
                 },
                 {
-                    id: 7,
+                    id: 8,
                     name: "Backup",
                     route: "/",
                     imageClass: "yellow-background"
                 },
             ],
         };
+    },
+    methods: {
+        logOut: function () {
+            tokenHandler.setAccessToken(null);
+            tokenHandler.setRefreshToken(null);
+            this.$router.push("/authorise");
+        }
     },
     created: function () {
         if (!tokenHandler.getAccessToken()) {
