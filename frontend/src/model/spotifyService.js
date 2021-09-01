@@ -1,7 +1,10 @@
 import tokenHandler from "@/model/tokenHandler.js";
 
+// TODO: replace with .env
+const urlStart = "http://localhost:3000"
+
 const getPlaylists = async () => {
-	const url = "/spotify/playlists";
+	const url = urlStart + "/spotify/playlists";
 
 	const response = await fetch(url, {
 		headers: {
@@ -14,7 +17,7 @@ const getPlaylists = async () => {
 };
 
 const getPlaylistCoverArt = async (playlistHref, size) => {
-	const url = `/spotify/cover_art?playlist=${playlistHref}&size=${size}`;
+	const url = `${urlStart}/spotify/cover_art?playlist=${playlistHref}&size=${size}`;
 
 	const response = await fetch(url, {
 		headers: {

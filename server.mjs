@@ -19,7 +19,7 @@ import scheduler from "./models/scheduler.mjs";
 // const megamixRoutes = require('./routes/megamix');
 
 const app = express();
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
 
 megamixStorage.init();
 scheduler.scheduleMegamixes();

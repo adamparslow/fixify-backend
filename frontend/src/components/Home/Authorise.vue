@@ -5,7 +5,8 @@
         </header>
         <article>
             <p>Please log into your spotify to gain access to Fixify</p>
-            <a href="/auth/login" class="rounded-button">Log In</a>
+            // TODO: move into .env
+            <a href="http://localhost:3000/auth/login" class="rounded-button">Log In</a>
         </article>
     </div>
 </template>
