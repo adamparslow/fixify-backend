@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Collage from "../views/Collage.vue";
 import Megamix from "../views/Megamix.vue";
+import Search from "../views/Search.vue";
 import Authorise from "../components/Home/Authorise.vue";
 import Features from "../components/Home/Features.vue";
 import AuthReader from "../components/Home/AuthReader.vue";
@@ -38,6 +39,10 @@ const routes = [
 		path: "/megamix",
 		component: Megamix,
 	},
+	{
+		path: "/search",
+		component: Search
+	}
 ];
 
 const router = new VueRouter({

@@ -34,7 +34,7 @@ export default {
                 {
                     id: 3,
                     name: "Search",
-                    route: "/",
+                    route: "/search",
                     imageClass: "green-background"
                 },
                 {
