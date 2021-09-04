@@ -15,10 +15,9 @@ const generateMegamixes = async () => {
 
 const generateMegamixFromRefreshToken = async (refreshToken, userId) => {
 	let accessToken = 0;
+	let expiresAt = 0;
 
-	console.log(refreshToken);
-
-	const spotifyApi = new SpotifyApi(accessToken, refreshToken);
+	const spotifyApi = new SpotifyApi(accessToken, refreshToken, expiresAt);
 
 	// Get playlists and find the links to the daily mixes
 	const playlists = await spotifyApi.getPlaylists();

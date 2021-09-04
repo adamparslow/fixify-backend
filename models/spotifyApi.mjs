@@ -4,9 +4,10 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export default class SpotifyApi {
-	constructor(accessToken, refreshToken) {
+	constructor(accessToken, refreshToken, expiresAt) {
 		this._accessToken = accessToken;
 		this._refreshToken = refreshToken;
+		this._expiresAt = expiresAt
 	}
 
 	get accessToken() {
@@ -15,6 +16,10 @@ export default class SpotifyApi {
 
 	get refreshToken() {
 		return this._refreshToken;
+	}
+
+	get expiresAt() {
+		return this._expiresAt;
 	}
 
 	// Public
@@ -159,17 +164,21 @@ export default class SpotifyApi {
 		return tracks;
 	}
 
+
+	// **************************************************
+
 	async makeApiRequestAndProcessJson(method, url, body) {
 		const response = await this.makeApiRequest(url, () => this.getHeaders(body, method));
 		return await response.json();
 	}
 
 	async makeApiRequest(url, getData) {
-		let response = await fetch(url, getData());
-		if (response.status == 401 || response.status == 400) {
+		if (this.expiresAt < Date.now()) {
 			await this.refreshAccessToken();
-			return await fetch(url, getData());
 		}
+
+		let response = await fetch(url, getData());
+
 		return response;
 	}
 
@@ -182,10 +191,8 @@ export default class SpotifyApi {
 			},
 		};
 
-		if (method === "POST" || method === "DELETE") {
+		if (method === "POST" || method === "DELETE" || method === "PUT") {
 			header.body = JSON.stringify(body);
-		} else if (method === "PUT") {
-			header.body = body;
 		}
 
 		return header;
@@ -194,6 +201,7 @@ export default class SpotifyApi {
 	getJPEGHeaders(body, method) {
 		const headers = this.getHeaders(body, method);
 		headers.headers["Content-Type"] = "image/jpeg"
+		headers.body = body;
 		return headers;
 	}
 
@@ -221,6 +229,7 @@ export default class SpotifyApi {
 		const json = await response.json();
 
 		this._accessToken = json.access_token;
+		this._expiresAt = Date.now() + json.expires_in * 1000;
 	}
 }
 
