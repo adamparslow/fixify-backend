@@ -1,12 +1,8 @@
-# Fixify
+# Fixify Backend
 Various tools designed to help improve spotify. 
 
 ## Local Setup Instructions
-1.  Run 
-    ```
-    npm install
-    ```
-    in both the root directory and the ```frontend``` directory
+1.  Run ```npm install```
 
 2. Create a ```.env``` file with the following fields: 
     ```
@@ -14,6 +10,7 @@ Various tools designed to help improve spotify.
     CLIENT_SECRET=from Spotify
     REDIRECT_URI={yoururl}/auth/callback
     SPOTIFY_API_URL=https://api.spotify.com/vi
+    FRONTEND_URI={yourfrontendurl}
     ```
      
 ## Deployment onto Glitch
@@ -27,9 +24,3 @@ Various tools designed to help improve spotify.
     npm run deploy
     ```
 3. (First time only) Copy in the link to your glitch repo.
-4. Log into glitch, open a terminal and run 
-    ```
-    npm run build
-    ```
-    from the ```frontend``` folder. 
-
