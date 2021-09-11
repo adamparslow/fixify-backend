@@ -48,7 +48,20 @@ router.get("/liked_songs", async (req, res) => {
 	})
 
 	res.send(generateResponse(spotifyApi, likedSongs));
-})
+});
+
+router.get("/song_details", async (req, res) => {
+	const accessToken = req.headers.access_token;
+	const refreshToken = req.headers.refresh_token;
+	const expiresAt = req.headers.expires_at;
+	const songId = req.query.id;
+
+	const spotifyApi = new SpotifyApi(accessToken, refreshToken, expiresAt);
+
+	res.send(generateResponse(spotifyApi, {
+		dummyData: songId
+	}));
+});
 
 function generateResponse(spotifyApi, data) {
 	return {
