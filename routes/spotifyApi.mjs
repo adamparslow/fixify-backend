@@ -35,9 +35,19 @@ router.get("/liked_songs", async (req, res) => {
 
 	const spotifyApi = new SpotifyApi(accessToken, refreshToken, expiresAt);
 
-	const likedSongs = await spotifyApi.getLikedSongs();
+	let likedSongs = await spotifyApi.getLikedSongs();
 
-	res.send(generateResponse(spotifyApi, likedSongs.filter((trackData) => trackData.track.name === "VBS")));
+	likedSongs = likedSongs.map((songData) => {
+		return {
+			added_at: songData.added_at,
+			name: songData.track.name,
+			album: songData.track.album.name,
+			artists: songData.track.artists.map(artist => artist.name),
+			id: songData.track.id
+		}
+	})
+
+	res.send(generateResponse(spotifyApi, likedSongs));
 })
 
 function generateResponse(spotifyApi, data) {

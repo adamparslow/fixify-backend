@@ -147,9 +147,10 @@ export default class SpotifyApi {
 		const initialResponse = await this.makeApiRequestAndProcessJson("GET", url);
 		let tracks = initialResponse.items;
 		const totalTracks = initialResponse.total;
+		console.log("Total tracks = " + totalTracks)
 		const promises = [];
 
-		for (let i = 50; i < totalTracks; i += 50) {
+		for (let i = 50; i <= totalTracks; i += 50) {
 			console.log(i);
 			promises.push(new Promise(async (resolve, reject) => {
 				const currUrl = url + "&offset=" + i;
@@ -159,7 +160,7 @@ export default class SpotifyApi {
 			}));
 		}
 
-		Promise.all(promises);
+		await Promise.all(promises);
 
 		return tracks;
 	}
