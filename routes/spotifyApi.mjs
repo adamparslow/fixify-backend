@@ -1,5 +1,6 @@
 import express from "express";
 import SpotifyApi from "../models/spotifyApi.mjs";
+import { getSongDetails } from "../service/songDetails.mjs";
 
 const router = express.Router();
 
@@ -12,6 +13,7 @@ router.get("/playlists", async (req, res) => {
 
 	const playlists = await spotifyApi.getPlaylists();
 	const response = generateResponse(spotifyApi, playlists);
+	res.send(generateResponse(spotifyApi, response));
 });
 
 router.get("/cover_art", async (req, res) => {
@@ -58,9 +60,9 @@ router.get("/song_details", async (req, res) => {
 
 	const spotifyApi = new SpotifyApi(accessToken, refreshToken, expiresAt);
 
-	res.send(generateResponse(spotifyApi, {
-		dummyData: songId
-	}));
+	const response = await getSongDetails(songId, spotifyApi);
+
+	res.send(generateResponse(spotifyApi, response));
 });
 
 function generateResponse(spotifyApi, data) {
