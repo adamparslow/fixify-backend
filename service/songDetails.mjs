@@ -1,9 +1,25 @@
 
 export const getSongDetails = async (id, spotifyApi) => {
     const playlistNames = await getPlaylistsThatContainTheSong(id, spotifyApi)
+    const audioFeaturesResponse = await spotifyApi.getAudioFeatures([id]);
+    const audioFeatures = audioFeaturesResponse.audio_features[0];
+    const addedAt = await getWhenSongWasLiked(id, spotifyApi);
+
 
     return {
-        playlists: playlistNames
+        playlists: playlistNames,
+        audioFeatures: {
+            danceability: audioFeatures.danceability, 
+            energy: audioFeatures.energy, 
+            loudness: audioFeatures.loudness,
+            speechiness: audioFeatures.speechiness,
+            acousticness: audioFeatures.acousticness,
+            instrumentalness: audioFeatures.instrumentalness,
+            liveness: audioFeatures.liveness,
+            valence: audioFeatures.valence,
+            tempo: audioFeatures.tempo
+        },
+        addedAt
     }
 }
 
@@ -36,4 +52,15 @@ const getPlaylistsThatContainTheSong = async (id, spotifyApi) => {
     // console.log(playlists);
 
     return containingPlaylists;
+}
+
+const getWhenSongWasLiked = async (id, spotifyApi) => {
+    const likedSongs = await spotifyApi.getLikedSongs();
+    let likedSong = null;
+    likedSongs.forEach(song => {
+        if (song != null && song.track.id === id) {
+            likedSong = song;
+        }
+    });
+    return likedSong.added_at;
 }

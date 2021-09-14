@@ -165,6 +165,12 @@ export default class SpotifyApi {
 		return tracks;
 	}
 
+	// Public
+	async getAudioFeatures(ids) {
+		const url = process.env.SPOTIFY_API_URI + "audio-features?ids=" + ids.join(",");
+		return await this.makeApiRequestAndProcessJson("GET", url);
+	}
+
 
 	// **************************************************
 
