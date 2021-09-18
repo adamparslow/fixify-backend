@@ -143,21 +143,25 @@ export default class SpotifyApi {
 	// Public
 	async getLikedSongs() {
 		const url = process.env.SPOTIFY_API_URI + "me/tracks?limit=50";
-
-		const initialResponse = await this.makeApiRequestAndProcessJson("GET", url);
-		let tracks = initialResponse.items;
-		const totalTracks = initialResponse.total;
-		console.log("Total tracks = " + totalTracks)
 		const promises = [];
 
+		const initialResponse = await this.makeApiRequestAndProcessJson("GET", url);
+		const totalTracks = initialResponse.total;
+
+		const tracks = Array(totalTracks);
+		initialResponse.items.forEach((af, j) => {
+			tracks.splice(j, 1, af);
+		});
+
 		for (let i = 50; i <= totalTracks; i += 50) {
-			console.log(i);
-			promises.push(new Promise(async (resolve, reject) => {
+			promises.push((async () => {
 				const currUrl = url + "&offset=" + i;
 				const response = await this.makeApiRequestAndProcessJson("GET", currUrl);
-				tracks = tracks.concat(response.items);
-				resolve();
-			}));
+				console.log(i);
+				response.items.forEach((af, j) => {
+					tracks.splice(i + j, 1, af);
+				});
+			})());
 		}
 
 		await Promise.all(promises);
@@ -167,8 +171,26 @@ export default class SpotifyApi {
 
 	// Public
 	async getAudioFeatures(ids) {
-		const url = process.env.SPOTIFY_API_URI + "audio-features?ids=" + ids.join(",");
-		return await this.makeApiRequestAndProcessJson("GET", url);
+		const BATCH_SIZE = 100;
+		const audioFeatures = Array(ids.length);
+		const promises = [];
+
+		for (let i = 0; i < ids.length; i += BATCH_SIZE) {
+			promises.push((async () => {
+				const idString = ids.slice(i, i+BATCH_SIZE).join(",");
+				const url = process.env.SPOTIFY_API_URI + "audio-features?ids=" + idString;
+				const response = await this.makeApiRequestAndProcessJson("GET", url);
+				const audioFeaturesSlice = response.audio_features;
+				// audioFeatures = audioFeatures.concat(audioFeaturesSlice.audio_features);
+
+				audioFeaturesSlice.forEach((af, j) => {
+					audioFeatures.splice(i + j, 1, af);
+				});
+			})());
+		}
+		await Promise.all(promises);
+
+		return audioFeatures;
 	}
 
 
@@ -176,7 +198,8 @@ export default class SpotifyApi {
 
 	async makeApiRequestAndProcessJson(method, url, body) {
 		const response = await this.makeApiRequest(url, () => this.getHeaders(body, method));
-		return await response.json();
+		const json = await response.json();
+		return json;
 	}
 
 	async makeApiRequest(url, getData) {

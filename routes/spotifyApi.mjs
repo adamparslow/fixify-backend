@@ -1,6 +1,7 @@
 import express from "express";
 import SpotifyApi from "../models/spotifyApi.mjs";
 import { getSongDetails } from "../service/songDetails.mjs";
+import { getMoodRingData } from "../service/moodRing.mjs";
 
 const router = express.Router();
 
@@ -61,6 +62,18 @@ router.get("/song_details", async (req, res) => {
 	const spotifyApi = new SpotifyApi(accessToken, refreshToken, expiresAt);
 
 	const response = await getSongDetails(songId, spotifyApi);
+
+	res.send(generateResponse(spotifyApi, response));
+});
+
+router.get("/mood_ring", async (req, res) => {
+	const accessToken = req.headers.access_token;
+	const refreshToken = req.headers.refresh_token;
+	const expiresAt = req.headers.expires_at;
+
+	const spotifyApi = new SpotifyApi(accessToken, refreshToken, expiresAt);
+
+	const response = await getMoodRingData(spotifyApi);
 
 	res.send(generateResponse(spotifyApi, response));
 });
