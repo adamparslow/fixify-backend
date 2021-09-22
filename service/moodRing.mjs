@@ -68,5 +68,33 @@ export const getMoodRingData = async (spotifyApi) => {
         };
     });
 
-    return averages;
+    const sevenDayAverage = Array(averages.length)
+
+    for (let i = 0; i < averages.length; i++) {
+        let danceability = 0;
+        if (i < 7) {
+            for (let j = 0; j < i; j++) {
+                danceability += averages[j].feature.danceability;
+            }
+            danceability /= (i+1);
+        } else {
+            for (let j = i - 7; j < i; j++) {
+                danceability += averages[j].feature.danceability;
+            }
+            danceability /= 7;
+        }
+
+        console.log(danceability);
+        sevenDayAverage[i] = {
+            date: averages[i].date,
+            feature: {
+                danceabilitySmooth: danceability,
+                danceability: averages[i].feature.danceability
+            }
+        };
+    }
+
+    console.log(sevenDayAverage);
+
+    return sevenDayAverage;
 };
