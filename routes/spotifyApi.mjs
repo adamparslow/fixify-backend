@@ -2,6 +2,7 @@ import express from "express";
 import SpotifyApi from "../models/spotifyApi.mjs";
 import { getSongDetails } from "../service/songDetails.mjs";
 import { getMoodRingData } from "../service/moodRing.mjs";
+import { getLikedSongs, storeLikedSongs, doesLikedSongsExist } from "../service/likedSongStorage.mjs";
 
 const router = express.Router();
 
@@ -38,17 +39,19 @@ router.get("/liked_songs", async (req, res) => {
 
 	const spotifyApi = new SpotifyApi(accessToken, refreshToken, expiresAt);
 
-	let likedSongs = await spotifyApi.getLikedSongs();
+	const userIdData = await spotifyApi.getMyUserID();
+	const userId = userIdData.id;
+	let likedSongs = [];
 
-	likedSongs = likedSongs.map((songData) => {
-		return {
-			added_at: songData.added_at,
-			name: songData.track.name,
-			album: songData.track.album.name,
-			artists: songData.track.artists.map(artist => artist.name),
-			id: songData.track.id
-		}
-	})
+	if (!doesLikedSongsExist(userId)) {
+		likedSongs = await getLikedSongsFromSpotify(spotifyApi, userId);
+	} else {
+		console.log('cached');
+		likedSongs = getLikedSongs(userId);
+		setTimeout(async () => {
+			const likedSongs = await getLikedSongsFromSpotify(spotifyApi, userId);
+		}, 1000)
+	}
 
 	res.send(generateResponse(spotifyApi, likedSongs));
 });
@@ -84,6 +87,21 @@ function generateResponse(spotifyApi, data) {
 		access_token: spotifyApi.accessToken,
 		expires_at: spotifyApi.expiresAt
 	}
+};
+
+async function getLikedSongsFromSpotify(spotifyApi, userId) {
+	let likedSongs = await spotifyApi.getLikedSongs();
+	likedSongs = likedSongs.map((songData) => {
+		return {
+			added_at: songData.added_at,
+			name: songData.track.name,
+			album: songData.track.album.name,
+			artists: songData.track.artists.map(artist => artist.name),
+			id: songData.track.id
+		}
+	});
+	storeLikedSongs(userId, likedSongs);
+	return likedSongs;
 }
 
 export default router;
