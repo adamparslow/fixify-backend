@@ -10,13 +10,6 @@ import spotifyRoutes from "./routes/spotifyApi.mjs";
 import megamixStorage from "./models/megamixStorage.mjs";
 import scheduler from "./models/scheduler.mjs";
 
-import admin from 'firebase-admin'
-import { getServiceAccount } from './models/firebaseAuth.mjs';
-
-admin.initializeApp({
-	credential: admin.credential.cert(getServiceAccount()),
-	storageBucket: process.env.BUCKET_URL
-});
 
 // const express = require('express');
 // const cors = require('cors');
@@ -40,8 +33,6 @@ app.use(express.static("client/build"))
 	.use("/megamix", megamixRoutes)
 	.use("/spotify", spotifyRoutes)
 	.use("/", generalRoutes);
-
-app.locals.bucket = admin.storage().bucket();
 
 app.listen(port, () => {
 	console.log(`Listening on port ${port}...`);
