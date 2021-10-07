@@ -43,13 +43,13 @@ router.get("/liked_songs", async (req, res) => {
 	const userId = userIdData.id;
 	let likedSongs = [];
 
-	if (!doesLikedSongsExist(userId)) {
+	if (!(await doesLikedSongsExist(userId))) {
 		likedSongs = await getLikedSongsFromSpotify(spotifyApi, userId);
 	} else {
 		console.log('cached');
-		likedSongs = getLikedSongs(userId);
+		likedSongs = await getLikedSongs(userId);
 		setTimeout(async () => {
-			const likedSongs = await getLikedSongsFromSpotify(spotifyApi, userId);
+			await getLikedSongsFromSpotify(spotifyApi, userId);
 		}, 1000)
 	}
 

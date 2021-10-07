@@ -1,26 +1,12 @@
-import fs from "fs";
+import { doesFileExist, createFile, getFileContents } from './firebaseBucket.mjs';
 
-export const storeLikedSongs = (userId, likedSongs) => {
-    if (!fs.existsSync(".data")) {
-        fs.mkdirSync(".data");
-    }
+export const storeLikedSongs = async (userId, likedSongs) => 
+    await createFile(filePath(userId), JSON.stringify(likedSongs));
 
-    if (!fs.existsSync(".data/likedSongs")) {
-        fs.mkdirSync(".data/likedSongs");
-    }
+export const getLikedSongs = async (userId) => 
+    await getFileContents(filePath(userId));
 
-    fs.writeFileSync(filePath(userId), JSON.stringify(likedSongs));
-};
+export const doesLikedSongsExist = async (userId) => 
+    await doesFileExist(filePath(userId));
 
-export const getLikedSongs = (userId) => {
-    const stringData = fs.readFileSync(filePath(userId));
-    return JSON.parse(stringData);
-};
-
-export const doesLikedSongsExist = (userId) => {
-    return fs.existsSync(filePath(userId));
-}
-
-const filePath = (userId) => {
-    return `.data/likedSongs/${userId}_likedSongs.json`;
-}
+const filePath = (userId) => `likedSongs/${userId}_likedSongs.json`;
