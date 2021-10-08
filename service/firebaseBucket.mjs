@@ -9,7 +9,8 @@ admin.initializeApp({
 export const bucket = admin.storage().bucket();
 
 export const doesFileExist = async (filePath) => {
-    return await bucket.file(filePath).exists();
+    const response = await bucket.file(filePath).exists();
+    return response[0];
 }
 
 export const createFile = async (filePath, data) => {
@@ -19,6 +20,14 @@ export const createFile = async (filePath, data) => {
 export const getFileContents = async (filePath) => {
     const response = await bucket.file(filePath).download();
     return JSON.parse(response);
+}
+
+export const getFilesInFolder = async (folderPath) => {
+    const files = await bucket.getFiles();
+    const fileNames = files[0]
+                        .map(file => file.name)
+                        .filter(fn => fn.includes(folderPath));
+    return fileNames;
 }
 
 export const deleteFile = async (filePath) => {

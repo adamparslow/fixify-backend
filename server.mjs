@@ -22,7 +22,6 @@ import scheduler from "./models/scheduler.mjs";
 const app = express();
 const port = process.env.PORT || 3000;
 
-megamixStorage.init();
 scheduler.scheduleMegamixes();
 
 app.use(express.static("client/build"))

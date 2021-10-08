@@ -1,89 +1,52 @@
 import fs from "fs";
 import Database from "better-sqlite3";
 import { info } from "console";
+import * as firebaseBucket from '../service/firebaseBucket.mjs';
 
-const databaseFileLocation = "./.data/sqlite.db";
+// const databaseFileLocation = "./.data/sqlite.db";
 
-const isRegistered = (userId) => {
-	const database = openDatabase();
-	const info = database
-		.prepare("SELECT * FROM Megamix WHERE userId = ?")
-		.all(userId);
+const isRegistered = async (userId) => 
+	await firebaseBucket.doesFileExist(filePath(userId));
 
-	return info.length > 0;
+const registerUser = async (refreshToken, userId) => {
+	const data = {
+		refreshToken
+	};
+	await firebaseBucket.createFile(filePath(userId), JSON.stringify(data));
 };
 
-function databaseExists() {
-	return fs.existsSync(databaseFileLocation);
-}
+const deregisterUser = async (userId) => 
+	await firebaseBucket.deleteFile(filePath(userId));
 
-function createMegamixTable() {
-	const database = openDatabase();
-	database.exec(
-		"CREATE TABLE Megamix (userId TEXT PRIMARY KEY, refreshToken TEXT)"
-	);
-	console.log("Table created");
-}
+const getMegamixes = async () => {
+	const megamixes = [];
 
-function openDatabase() {
-	if (!databaseExists()) {
-		if (!fs.existsSync(".data")) {
-			fs.mkdir(".data", () => {});
-		}
-
-		const cs = fs.createWriteStream(".data/sqlite.db");
-		cs.end();
+	const fileNames = await firebaseBucket.getFilesInFolder('megamix');	
+	console.log(fileNames);
+	for (const name of fileNames) {
+		const data = await firebaseBucket.getFileContents(name);
+		const userId = name.split("/")[1].split(".")[0];
+		const refreshToken = data.refreshToken;
+		megamixes.push({
+			userId,
+			refreshToken
+		});
 	}
-
-	return new Database("./.data/sqlite.db");
-}
-
-const init = () => {
-	const exists = databaseExists();
-	// const database = await openDatabase();
-	// database = new sqlite3.Database(databaseFileLocation);
-
-	if (!exists) {
-		console.log("Creating megamix table");
-		createMegamixTable();
-	}
+	
+	return megamixes;
 };
 
-const registerUser = (refreshToken, userId) => {
-	const database = openDatabase();
-
-	if (isRegistered(userId)) {
-		database
-			.prepare("UPDATE Megamix SET refreshToken = ? WHERE userID = ?")
-			.run(refreshToken, userId);
-	} else {
-		database
-			.prepare("INSERT INTO Megamix Values (?, ?)")
-			.run(userId, refreshToken);
-	}
-
-	console.log("Data saved");
-};
-
-const deregisterUser = (userId) => {
-	const database = openDatabase();
-
-	database.prepare("DELETE FROM Megamix WHERE userId = ?").run(userId);
-};
-
-const getMegamixes = () => {
-	const database = openDatabase();
-	return database.prepare("SELECT * FROM Megamix").all();
-};
-
-const clearMegamixes = () => {
-	const database = openDatabase();
-	database.prepare("DELETE FROM Megamix").run();
+const clearMegamixes = async () => {
+	const fileNames = await firebaseBucket.getFilesInFolder('megamix');
+	fileNames.forEach(async name => {
+		await firebaseBucket.deleteFile(name);
+	});
 	console.log("cleared");
 };
 
+const filePath = (userId) => `megamix/${userId}.json`;
+
 export default {
-	init,
 	registerUser,
 	deregisterUser,
 	getMegamixes,

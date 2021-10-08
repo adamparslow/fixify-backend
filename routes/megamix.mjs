@@ -6,6 +6,7 @@ import SpotifyApi from "../models/spotifyApi.mjs";
 
 const router = express.Router();
 
+// Debug routes
 router.post("/save_megamix", (req, res) => {
 	const refreshToken = req.body.refresh_token;
 	const userId = req.body.user_id;
@@ -19,8 +20,8 @@ router.post("/save_megamix", (req, res) => {
 	res.send(refreshToken);
 });
 
-router.post("/get_megamixes", (req, res) => {
-	megamixCreator.generateMegamixes();
+router.post("/get_megamixes", async (req, res) => {
+	await megamixCreator.generateMegamixes();
 
 	res.sendStatus(200);
 });
@@ -31,12 +32,14 @@ router.post("/clear", (req, res) => {
 	res.sendStatus(200);
 });
 
+// Real Routes
 router.get("/register", async (req, res) => {
 	const refreshToken = req.query.refresh_token;
 	const spotifyApi = new SpotifyApi("", refreshToken, 0);
 	const user = await spotifyApi.getMyUserID();
 
-	const isRegistered = megamixStorage.isRegistered(user.id);
+	const isRegistered = await megamixStorage.isRegistered(user.id);
+	console.log(isRegistered);
 
 	res.send(isRegistered);
 });
@@ -47,7 +50,7 @@ router.post("/register", async (req, res) => {
 	const spotifyApi = new SpotifyApi("", refreshToken, 0);
 	const user = await spotifyApi.getMyUserID();
 
-	megamixStorage.registerUser(refreshToken, user.id);
+	await megamixStorage.registerUser(refreshToken, user.id);
 
 	res.sendStatus(200);
 });
@@ -58,7 +61,7 @@ router.delete("/register", async (req, res) => {
 	const spotifyApi = new SpotifyApi("", refreshToken, 0);
 	const user = await spotifyApi.getMyUserID();
 
-	megamixStorage.deregisterUser(user.id);
+	await megamixStorage.deregisterUser(user.id);
 
 	res.sendStatus(200);
 });
