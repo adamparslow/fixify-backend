@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
-import dotenv from "dotenv";
+import * as envConfig from '../config/envConfig.mjs'
 
-dotenv.config();
+envConfig.setup();
 
 export default class SpotifyApi {
 	constructor(accessToken, refreshToken, expiresAt) {

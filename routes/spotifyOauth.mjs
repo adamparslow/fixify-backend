@@ -1,9 +1,10 @@
+import { SSL_OP_TLS_BLOCK_PADDING_BUG } from "constants";
 import express from "express";
 import querystring from "querystring";
 import request from "request";
-import dotenv from "dotenv";
+import * as envConfig from '../config/envConfig.mjs';
 
-dotenv.config();
+envConfig.setup();
 
 // const express = require('express');
 // const querystring = require('querystring');

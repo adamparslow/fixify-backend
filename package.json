@@ -7,6 +7,7 @@
     "better-sqlite3": "^7.4.3",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
+    "docker-secrets": "^1.0.2",
     "dotenv": "^8.6.0",
     "express": "^4.17.1",
     "firebase-admin": "^9.12.0",
@@ -22,7 +23,7 @@
   "scripts": {
     "test": "nodemon --experimental-modules server.mjs",
     "start": "node --experimental-modules server.mjs",
-    "deploy": "npx glitcheroo deploy"
+    "deploy": "gcloud builds submit --tag gcr.io/fixify-backend/backend && gcloud run deploy --image gcr.io/fixify-backend/backend"
   },
   "repository": {
     "type": "git",
