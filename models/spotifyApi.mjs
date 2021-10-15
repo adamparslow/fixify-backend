@@ -142,7 +142,6 @@ export default class SpotifyApi {
 
 	// Public
 	async getLikedSongs() {
-		console.log("Start of liked songs: " + Date.now());
 		const url = process.env.SPOTIFY_API_URI + "me/tracks?limit=50";
 		const promises = [];
 
@@ -158,6 +157,7 @@ export default class SpotifyApi {
 			promises.push((async () => {
 				const currUrl = url + "&offset=" + i;
 				const response = await this.makeApiRequestAndProcessJson("GET", currUrl);
+				if (response.error) console.log(response);
 				response.items.forEach((af, j) => {
 					tracks.splice(i + j, 1, af);
 				});
@@ -165,7 +165,6 @@ export default class SpotifyApi {
 		}
 
 		await Promise.all(promises);
-		console.log("End of liked songs:   " + Date.now());
 		return tracks;
 	}
 

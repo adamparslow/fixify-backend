@@ -1,9 +1,13 @@
+import * as likedSongStorage from './likedSongStorage.mjs';
+import { getLikedSongs } from './likedSongStorage.mjs';
 
 export const getSongDetails = async (id, spotifyApi) => {
+    console.log("start song details: " + Date.now());
     const playlistNames = await getPlaylistsThatContainTheSong(id, spotifyApi)
-    const audioFeaturesResponse = await spotifyApi.getAudioFeatures([id]);
-    const audioFeatures = audioFeaturesResponse.audio_features[0];
+    const audioFeaturesResponse = await spotifyApi.getAudioFeatures([id, spotifyApi]);
+    const audioFeatures = audioFeaturesResponse[0];
     const addedAt = await getWhenSongWasLiked(id, spotifyApi);
+    console.log("end song details: " + Date.now());
 
 
     return {
@@ -30,7 +34,6 @@ const getPlaylistsThatContainTheSong = async (id, spotifyApi) => {
     const allPlaylists = await spotifyApi.getPlaylists();
     const userInfo = await spotifyApi.getMyUserID();
     const userId = userInfo.id;
-    // console.log(userId);
     console.log(id);
 
     allPlaylists.forEach(playlist => {
@@ -49,16 +52,16 @@ const getPlaylistsThatContainTheSong = async (id, spotifyApi) => {
     });
     await Promise.all(promises);
 
-    // console.log(playlists);
-
     return containingPlaylists;
 }
 
 const getWhenSongWasLiked = async (id, spotifyApi) => {
-    const likedSongs = await spotifyApi.getLikedSongs();
+    const userData = await spotifyApi.getMyUserID();
+    const userId = userData.id;
+    const likedSongs = await getLikedSongs(userId);
     let likedSong = null;
     likedSongs.forEach(song => {
-        if (song != null && song.track.id === id) {
+        if (song != null && song.id === id) {
             likedSong = song;
         }
     });
