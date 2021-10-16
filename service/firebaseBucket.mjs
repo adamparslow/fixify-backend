@@ -14,7 +14,9 @@ export const doesFileExist = async (filePath) => {
 }
 
 export const createFile = async (filePath, data) => {
-    await bucket.file(filePath).createWriteStream().end(data);
+    const file = await bucket.file(filePath);
+    const stream = await file.createWriteStream();
+    await stream.end(data);
 }
 
 export const getFileContents = async (filePath) => {

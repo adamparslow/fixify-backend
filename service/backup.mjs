@@ -11,6 +11,6 @@ export const backupLikedSongs = async (spotifyApi, userId) => {
 			id: songData.track.id
 		}
 	});
-	storeLikedSongs(userId, likedSongs);
+	await storeLikedSongs(userId, likedSongs);
 	return likedSongs;
 }
