@@ -70,8 +70,6 @@ router.post("/liked_songs/backup", async (req, res) => {
 
 	await backupLikedSongs(spotifyApi, userId);	
 
-	console.log("Do we make it here!!!!!!!!!!!!!!!!!!")
-
 	res.sendStatus(200);
 });
 

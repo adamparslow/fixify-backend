@@ -1,35 +1,45 @@
-import admin from 'firebase-admin'
-import { getServiceAccount } from '../models/firebaseAuth.mjs';
+import { initializeApp } from "firebase/app";
+import fetch from "node-fetch";
+import { getStorage, ref, uploadString, getDownloadURL, listAll } from "firebase/storage";
 
-admin.initializeApp({
-	credential: admin.credential.cert(getServiceAccount()),
-	storageBucket: process.env.BUCKET_URL
+const firebaseApp = initializeApp({
+  apiKey: 'AIzaSyAOmfsIq2eJcyvkpZoiyMGqpiQrUrEXjxw',
+//   authDomain: 'https://fixify-backend.web.app',
+  projectId: 'fixify-backend',
+//   databaseURL: '<your-database-url>',
+  storageBucket: 'gs://fixify-backend.appspot.com'
 });
 
-export const bucket = admin.storage().bucket();
+const storage = getStorage(firebaseApp);
 
 export const doesFileExist = async (filePath) => {
-    const response = await bucket.file(filePath).exists();
-    return response[0];
+  const fileRef = ref(storage, filePath);
+  const downloadURL = await getDownloadURL(fileRef).catch(() => {});
+  return downloadURL !== undefined;
 }
 
 export const createFile = async (filePath, data) => {
-    const file = await bucket.file(filePath);
-    const stream = await file.createWriteStream();
-    await stream.end(data);
+  const newFileRef = ref(storage, filePath);
+  await uploadString(newFileRef, data);
 }
 
 export const getFileContents = async (filePath) => {
-    const response = await bucket.file(filePath).download();
-    return JSON.parse(response);
+  const fileRef = ref(storage, filePath);
+  const downloadURL = await getDownloadURL(fileRef);
+  const response = await fetch(downloadURL);
+  return response.text();
+}
+
+export const getFileContentsAsJson = async (filePath) => {
+  const contents = await getFileContents(filePath);
+  return JSON.parse(contents);
 }
 
 export const getFilesInFolder = async (folderPath) => {
-    const files = await bucket.getFiles();
-    const fileNames = files[0]
-                        .map(file => file.name)
-                        .filter(fn => fn.includes(folderPath));
-    return fileNames;
+  const folderRef = ref(storage, folderPath);
+  const res = await listAll(folderRef);
+  const files = res.items.map(item => item.fullPath);
+  return files;
 }
 
 export const deleteFile = async (filePath) => {

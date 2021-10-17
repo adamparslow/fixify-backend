@@ -22,9 +22,8 @@ const getMegamixes = async () => {
 	const megamixes = [];
 
 	const fileNames = await firebaseBucket.getFilesInFolder('megamix');	
-	console.log(fileNames);
 	for (const name of fileNames) {
-		const data = await firebaseBucket.getFileContents(name);
+		const data = await firebaseBucket.getFileContentsAsJson(name);
 		const userId = name.split("/")[1].split(".")[0];
 		const refreshToken = data.refreshToken;
 		megamixes.push({
