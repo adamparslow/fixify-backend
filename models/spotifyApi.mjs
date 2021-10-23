@@ -192,6 +192,31 @@ export default class SpotifyApi {
 		return audioFeatures;
 	}
 
+	// Public 
+	async getFollowedArtists() {
+		const url = process.env.SPOTIFY_API_URI + "me/following?type=artist&limit=50";
+
+		return await this.getFollowedArtistsRecursive(url)
+	}
+
+	async getFollowedArtistsRecursive(url) {
+		const response = await this.makeApiRequestAndProcessJson(
+			"GET",
+			url
+		);
+
+		let items = response.artists.items;
+
+		if (items.length === response.artists.limit) {
+			const newItems = await this.getFollowedArtistsRecursive(
+				response.artists.next
+			);
+			items = items.concat(newItems);
+		}
+
+		return items;
+	}
+
 
 	// **************************************************
 

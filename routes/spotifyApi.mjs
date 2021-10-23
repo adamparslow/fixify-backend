@@ -97,6 +97,18 @@ router.get("/mood_ring", async (req, res) => {
 	res.send(generateResponse(spotifyApi, response));
 });
 
+router.get("/followed_artists", async (req, res) => {
+	const accessToken = req.headers.access_token;
+	const refreshToken = req.headers.refresh_token;
+	const expiresAt = req.headers.expires_at;
+
+	const spotifyApi = new SpotifyApi(accessToken, refreshToken, expiresAt);
+
+	const response = await spotifyApi.getFollowedArtists();
+
+	res.send(generateResponse(spotifyApi, response));
+});
+
 function generateResponse(spotifyApi, data) {
 	return {
 		data, 
