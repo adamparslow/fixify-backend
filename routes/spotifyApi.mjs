@@ -62,13 +62,14 @@ router.post("/liked_songs/backup", async (req, res) => {
 	const accessToken = req.headers.access_token;
 	const refreshToken = req.headers.refresh_token;
 	const expiresAt = req.headers.expires_at;
+	const force = req.body.force;
 
 	const spotifyApi = new SpotifyApi(accessToken, refreshToken, expiresAt);
 
 	const userIdData = await spotifyApi.getMyUserID();
 	const userId = userIdData.id;
 
-	await backupLikedSongs(spotifyApi, userId);	
+	await backupLikedSongs(spotifyApi, userId, force);	
 
 	res.sendStatus(200);
 });

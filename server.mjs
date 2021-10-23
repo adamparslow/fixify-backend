@@ -25,7 +25,7 @@ const port = process.env.PORT || 3000;
 scheduler.scheduleMegamixes();
 
 app.use(express.static("client/build"))
-	.use(express.json())
+	.use(express.json({strict: false}))
 	.use(cors())
 	.use(cookieParser())
 	.use("/auth", authRoutes)
