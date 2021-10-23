@@ -18,7 +18,7 @@ export const backupLikedSongs = async (spotifyApi, userId, force) => {
 	});
 
 	await storeLikedSongs(userId, {
-		expires_at: Date.now() + 5*60*1000,
+		expires_at: Date.now() + 30*60*1000,
 		likedSongs
 	});
 	return likedSongs;
