@@ -6,6 +6,7 @@ import generalRoutes from "./routes/general.mjs";
 import authRoutes from "./routes/spotifyOauth.mjs";
 import megamixRoutes from "./routes/megamix.mjs";
 import spotifyRoutes from "./routes/spotifyApi.mjs";
+import concertWatchRoutes from "./routes/concertWatch.mjs";
 
 import megamixStorage from "./models/megamixStorage.mjs";
 import scheduler from "./models/scheduler.mjs";
@@ -31,6 +32,7 @@ app.use(express.static("client/build"))
 	.use("/auth", authRoutes)
 	.use("/megamix", megamixRoutes)
 	.use("/spotify", spotifyRoutes)
+	.use("/concert_watch", concertWatchRoutes)
 	.use("/", generalRoutes);
 
 app.listen(port, () => {
