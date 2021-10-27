@@ -13,7 +13,11 @@ router.post("/register_artist", async (req, res) => {
         hash: ""
     });
 
-    res.sendStatus(200);
+	res.json({
+		"data": "",
+		"access_token": spotifyApi.accessToken,
+		"expires_at": spotifyApi.expiresAt
+	});
 });
 
 router.get("/setup", async (req, res) => {
@@ -40,7 +44,7 @@ router.get("/setup", async (req, res) => {
     console.log(artistsToSetup)
 
 	res.json({
-		"artists_to_setup": artistsToSetup,
+		"data": artistsToSetup,
 		"access_token": spotifyApi.accessToken,
 		"expires_at": spotifyApi.expiresAt
 	});
