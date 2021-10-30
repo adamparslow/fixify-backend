@@ -15,8 +15,8 @@ router.post("/register_artist", async (req, res) => {
 
 	res.json({
 		"data": "",
-		"access_token": spotifyApi.accessToken,
-		"expires_at": spotifyApi.expiresAt
+		"access_token": req.headers.accessToken,
+		"expires_at": req.headers.expiresAt
 	});
 });
 
@@ -28,6 +28,7 @@ router.get("/setup", async (req, res) => {
 	const spotifyApi = new SpotifyApi(accessToken, refreshToken, expiresAt);
 
     const artists = await spotifyApi.getFollowedArtists();
+
     const artistsToSetup = [];
     const promises = [];
 
@@ -35,7 +36,8 @@ router.get("/setup", async (req, res) => {
         promises.push(isArtistConcertPageRegistered(artist.id)
             .then(result => !result && artistsToSetup.push({
                 name: artist.name,
-                id: artist.id
+                id: artist.id,
+                image: artist.images[2]
             })));
     });
 
