@@ -1,13 +1,15 @@
 import fetch from "node-fetch";
-import * as envConfig from '../config/envConfig.mjs'
+// import * as envConfig from '../config/index.mjs'
+import config from '../config';
 
-envConfig.setup();
+// envConfig.setup();
 
 export default class SpotifyApi {
 	constructor(accessToken, refreshToken, expiresAt) {
 		this._accessToken = accessToken;
 		this._refreshToken = refreshToken;
 		this._expiresAt = expiresAt
+		this.base_url = config.spotify.api_url;
 	}
 
 	get accessToken() {
@@ -22,9 +24,13 @@ export default class SpotifyApi {
 		return this._expiresAt;
 	}
 
+	getUrl(uri) {
+		return config.spotify.api_url + uri;
+	}
+
 	// Public
 	async getPlaylists() {
-		const url = process.env.SPOTIFY_API_URI + "me/playlists?limit=50";
+		const url = this.getUrl("me/playlists?limit=50");
 
 		return await this.getPlaylistsRecursive(url);
 	}
@@ -86,7 +92,7 @@ export default class SpotifyApi {
 
 	// Public
 	async createPlaylist(userID, playlistName, description) {
-		const url = process.env.SPOTIFY_API_URI + `users/${userID}/playlists`;
+		const url = this.getUrl(`users/${userID}/playlists`);
 
 		const body = {
 			name: playlistName,
@@ -98,8 +104,7 @@ export default class SpotifyApi {
 
 	// Public
 	async addTracksToPlaylist(playlist, uris) {
-		const url =
-			process.env.SPOTIFY_API_URI + `playlists/${playlist.id}/tracks`;
+		const url = this.getUrl(`playlists/${playlist.id}/tracks`);
 		const responses = [];
 
 		for (let sent = 0; sent <= uris.length; sent += 100) {
@@ -120,8 +125,7 @@ export default class SpotifyApi {
 
 	// Public
 	async removeTracksFromPlaylist(playlist, uris) {
-		const url =
-			process.env.SPOTIFY_API_URI + `playlists/${playlist.id}/tracks`;
+		const url = this.getUrl(`playlists/${playlist.id}/tracks`);
 
 		for (let sent = 0; sent <= uris.length; sent += 100) {
 			const body = {
@@ -134,7 +138,7 @@ export default class SpotifyApi {
 
 	// Public
 	async getMyUserID() {
-		const url = process.env.SPOTIFY_API_URI + "me";
+		const url = this.getUrl("me");
 
 		const response = await this.makeApiRequestAndProcessJson("GET", url);
 		return response;
@@ -142,7 +146,7 @@ export default class SpotifyApi {
 
 	// Public
 	async getLikedSongs() {
-		const url = process.env.SPOTIFY_API_URI + "me/tracks?limit=50";
+		const url = this.getUrl("me/tracks?limit=50");
 		const promises = [];
 
 		const initialResponse = await this.makeApiRequestAndProcessJson("GET", url);
@@ -177,7 +181,7 @@ export default class SpotifyApi {
 		for (let i = 0; i < ids.length; i += BATCH_SIZE) {
 			promises.push((async () => {
 				const idString = ids.slice(i, i+BATCH_SIZE).join(",");
-				const url = process.env.SPOTIFY_API_URI + "audio-features?ids=" + idString;
+				const url = this.getUrl("audio-features?ids=" + idString);
 				const response = await this.makeApiRequestAndProcessJson("GET", url);
 				const audioFeaturesSlice = response.audio_features;
 				// audioFeatures = audioFeatures.concat(audioFeaturesSlice.audio_features);
@@ -194,7 +198,7 @@ export default class SpotifyApi {
 
 	// Public 
 	async getFollowedArtists() {
-		const url = process.env.SPOTIFY_API_URI + "me/following?type=artist&limit=50";
+		const url = this.getUrl("me/following?type=artist&limit=50");
 
 		return await this.getFollowedArtistsRecursive(url)
 	}
@@ -263,7 +267,7 @@ export default class SpotifyApi {
 		// const url = `${spotifyApiUrl}/auth/refresh_token?refresh_token=${this._refreshToken}`;
 		const url = `https://accounts.spotify.com/api/token`;
 		const idAndSecret = new Buffer(
-			process.env.CLIENT_ID + ":" + process.env.CLIENT_SECRET
+			config.spotify.client_id + ":" + config.spotify.client_secret
 		).toString("base64");
 
 		const urlSearchParams = new URLSearchParams();
