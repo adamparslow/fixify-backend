@@ -2,13 +2,8 @@ import { SSL_OP_TLS_BLOCK_PADDING_BUG } from "constants";
 import express from "express";
 import querystring from "querystring";
 import request from "request";
-import * as envConfig from '../config/envConfig.mjs';
+import config from '../config/index.mjs';
 
-envConfig.setup();
-
-// const express = require('express');
-// const querystring = require('querystring');
-// const request = require('request'); // "Request" library
 
 let router = express.Router();
 export default router;
@@ -26,9 +21,9 @@ router.get("/login", (req, res) => {
 		"https://accounts.spotify.com/authorize?" +
 			querystring.stringify({
 				response_type: "code",
-				client_id: process.env.CLIENT_ID,
+				client_id: config.spotify.client_id,
 				scope: scope,
-				redirect_uri: process.env.REDIRECT_URI,
+				redirect_uri: config.fixify.redirect_uri,
 				state: state,
 			})
 	);
@@ -66,14 +61,14 @@ router.get("/callback", (req, res) => {
 			url: "https://accounts.spotify.com/api/token",
 			form: {
 				code: code,
-				redirect_uri: process.env.REDIRECT_URI,
+				redirect_uri: config.fixify.redirect_uri,
 				grant_type: "authorization_code",
 			},
 			headers: {
 				Authorization:
 					"Basic " +
 					new Buffer(
-						process.env.CLIENT_ID + ":" + process.env.CLIENT_SECRET
+						config.spotify.client_id + ":" + config.spotify.client_secret
 					).toString("base64"),
 			},
 			json: true,
@@ -94,7 +89,7 @@ router.get("/callback", (req, res) => {
 
 				// we can also pass the token to the browser to make requests from there
 				res.redirect(
-					process.env.FRONTEND_URI + 
+					config.fixify.frontend_uri + 
 					"#/auth/collect/" +
 						querystring.stringify({
 							access_token: access_token,
@@ -123,7 +118,7 @@ router.get("/refresh_token", (req, res) => {
 			Authorization:
 				"Basic " +
 				new Buffer(
-					process.env.CLIENT_ID + ":" + process.env.CLIENT_SECRET
+					config.spotify.client_id + ":" + config.spotify.client_secret
 				).toString("base64"),
 		},
 		form: {

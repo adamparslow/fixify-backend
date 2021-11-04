@@ -1,14 +1,12 @@
 import fetch from "node-fetch";
-// import * as envConfig from '../config/index.mjs'
-import config from '../config';
-
-// envConfig.setup();
+import config from '../config/index.mjs';
 
 export default class SpotifyApi {
 	constructor(accessToken, refreshToken, expiresAt) {
 		this._accessToken = accessToken;
 		this._refreshToken = refreshToken;
 		this._expiresAt = expiresAt
+		console.log(config);
 		this.base_url = config.spotify.api_url;
 	}
 
@@ -273,7 +271,6 @@ export default class SpotifyApi {
 		const urlSearchParams = new URLSearchParams();
 		urlSearchParams.append("grant_type", "refresh_token");
 		urlSearchParams.append("refresh_token", this.refreshToken);
-		// urlSearchParams.append("client_id", process.env.CLIENT_ID);
 
 		const response = await fetch(url, {
 			method: "POST",
