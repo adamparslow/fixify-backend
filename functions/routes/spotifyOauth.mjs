@@ -46,9 +46,9 @@ router.get("/callback", (req, res) => {
 
 	var code = req.query.code || null;
 	var state = req.query.state || null;
-	var storedState = req.cookies ? req.cookies[stateKey] : null;
+	// var storedState = req.cookies ? req.cookies[stateKey] : null;
 
-	if (state === null || state !== storedState) {
+	if (state === null) { // || state !== storedState) {
 		res.redirect(
 			"/#" +
 				querystring.stringify({

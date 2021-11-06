@@ -13,7 +13,7 @@ import megamixStorage from "./models/megamixStorage.mjs";
 import scheduler from "./models/scheduler.mjs";
 
 const expressApp = express();
-const port = process.env.NODE_ENV == "production" ? process.env.PORT : 3000;
+// const port = process.env.NODE_ENV == "production" ? process.env.PORT : 3000;
 
 scheduler.scheduleMegamixes();
 
@@ -27,8 +27,10 @@ expressApp.use(express.static("client/build"))
 	.use("/concert_watch", concertWatchRoutes)
 	.use("/", generalRoutes);
 
-expressApp.listen(port, () => {
-	console.log(`Listening on port ${port}...`);
-});
+// expressApp.listen(port, () => {
+// 	console.log(`Listening on port ${port}...`);
+// });
 
-export const app = functions.https.onRequest(expressApp);
+export const app = functions.runWith({
+	timeoutSeconds: 300
+}).https.onRequest(expressApp);

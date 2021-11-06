@@ -5,9 +5,10 @@
     "lint": "eslint .",
     "serve": "firebase emulators:start --only functions",
     "shell": "firebase functions:shell",
-    "start": "npm run shell",
-    "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "start": " npm run shell",
+    "deploy": "firebase deploy --only functions,hosting",
+    "logs": "firebase functions:log",
+    "env": "firebase functions:config:unset env && firebase functions:config:set env=\"$(cat config/.env.prod.json)\""
   },
   "engines": {
     "node": "14"

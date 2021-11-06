@@ -1,9 +1,5 @@
-import fs from "fs";
-import Database from "better-sqlite3";
-import { info } from "console";
 import * as firebaseBucket from '../service/firebaseBucket.mjs';
 
-// const databaseFileLocation = "./.data/sqlite.db";
 
 const isRegistered = async (userId) => 
 	await firebaseBucket.doesFileExist(filePath(userId));

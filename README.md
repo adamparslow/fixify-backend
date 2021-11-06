@@ -4,20 +4,25 @@ Various tools designed to help improve spotify.
 ## Local Setup Instructions
 1.  Run ```npm install```
 
-2. Create a ```.env``` file with the following fields: 
+2. Create a ```.env.local.json``` file with the following fields
     ```
-    CLIENT_ID=from Spotify 
-    CLIENT_SECRET=from Spotify
-    REDIRECT_URI={yoururl}/auth/callback
-    SPOTIFY_API_URL=https://api.spotify.com/vi
-    FRONTEND_URI={yourfrontendurl}
+    {
+        "spotify": {
+            "client_id": "",
+            "client_secret": "",
+            "api_url": ""
+        },
+        "fixify": {
+            "redirect_uri": "/auth/callback",
+            "frontend_uri": ""
+        }
+    }
     ```
 
-## Firebase Deployment
-### `gcloud` Setup
-1. Follow the following link: [gcloud Setup](https://cloud.google.com/sdk/docs/quickstart#deb)
+3. Create a ```.env.prod.json``` with the same structure
 
-2. Run `gcloud init` from repo, select `fixify-backend`
      
 ## Deployment
-Run `npm run deploy` to deploy to google cloud
+Run `firebase deploy` to deploy to firebase
+
+May need to run `firebase init` first. 
