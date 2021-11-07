@@ -1,6 +1,9 @@
 import express from "express";
+import md5 from 'md5';
+import fetch from 'node-fetch';
 import { registerArtistConcertPage, isArtistConcertPageRegistered } from "../service/artistConcertPageStorage.mjs";
 import SpotifyApi from "../models/spotifyApi.mjs";
+// import fs from 'fs';
 
 const router = express.Router();
 
@@ -8,9 +11,13 @@ router.post("/register_artist", async (req, res) => {
     const artistId = req.body.artist_id;
     const url = req.body.url;
 
+    const webPage = await fetch(url);
+    const text = await webPage.text();
+    const hash = md5(text);
+
     await registerArtistConcertPage(artistId, {
-        url: url,
-        hash: ""
+        url,
+        hash
     });
 
 	res.json({
