@@ -10,12 +10,20 @@ import spotifyRoutes from "./routes/spotifyApi.mjs";
 import concertWatchRoutes from "./routes/concertWatch.mjs";
 
 import megamixCreator from "./models/megamixCreator.mjs";
+import * as artistHasher from './service/artistHasher.mjs';
 
 const megamixSchedule = "0 19 * * *";
 
 export const megamix = functions.pubsub.schedule(megamixSchedule).onRun(async () => {
 	console.log("Running schedule");
 	await megamixCreator.generateMegamixes();
+});
+
+artistHasher.genNewArtistHashes();
+const webHasherSchedule = "0 20 * * *";
+
+export const webHasher = functions.pubsub.schedule(webHasherSchedule).onRun(async () => {
+	await artistHasher.genNewArtistHashes();
 });
 
 const expressApp = express();
